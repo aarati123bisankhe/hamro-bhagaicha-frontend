@@ -7,14 +7,13 @@ import Button from "../components/Button";
 export default function Splash() {
   const router = useRouter();
 
-  
 
   return (
     <motion.div
       initial={{ x: 0 }}
       animate={{ x: 0 }}
       exit={{ x: "-100%" }}
-      transition={{ duration: 0.7 }}
+      transition={{ duration: 0.6 }}
       className="flex justify-center items-center min-h-screen bg-green-50 p-6"
       style={{
         background: "linear-gradient(135deg, #e3f8e6ff, #686868ff)",
@@ -56,14 +55,13 @@ export default function Splash() {
             A digital space where plant lovers grow, share, and learn together.
           </p>
 
-          {/* Button at bottom */}
           <div className="mt-9">
             <Button
                onClick={() => router.push("/auth/login")}
               style={{
                 backgroundColor: "#031039ff",
                 color: "white",
-                padding: "12px 35px",
+                padding: "12px 45px",
           borderRadius: "35px",
               }}
             >
