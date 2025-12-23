@@ -25,7 +25,7 @@ export default function Splash() {
           background: "linear-gradient(135deg, #D8F3DC, #475E4F)",
         }}
       >
-        {/* Left side: Image */}
+      
         <div className="md:w-1/2 w-full h-1/2 md:h-full">
           <img
             src="/images/image1.png"
@@ -34,7 +34,7 @@ export default function Splash() {
           />
         </div>
 
-        {/* Right side: Welcome text */}
+      
         <div className="md:w-1/2 w-full flex flex-col justify-center items-start p-12 h-full">
           <h2
             className="text-2xl font-medium mb-5"
