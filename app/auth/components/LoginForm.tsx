@@ -24,7 +24,7 @@ export default function LoginForm() {
     startTransition(async () => {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       console.log(values);
-      router.push("/auth/dashboard");
+      router.push("/dashboard");
     });
   };
 
