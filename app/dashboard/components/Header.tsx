@@ -5,11 +5,11 @@ export default function Header() {
     <>
       <div className="flex justify-between items-center px-10 py-4 bg-[#f9f7f2]">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 ">
+          <div className="w-11 h-11 ">
              <img
           src="/images/logo.png"
          alt="Plant"
-        className="w-11 h-11 object-cover"
+        className="w-12 h-12 object-cover"
         />
             
           </div>

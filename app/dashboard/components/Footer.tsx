@@ -27,7 +27,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="text-center text-xs mt-10 text-gray-700">
+      <div className=" text-xs mt-10 text-gray-700">
         © 2025 Hamro Bhagaicha. All rights reserved.
       </div>
     </footer>

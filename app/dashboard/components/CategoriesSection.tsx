@@ -13,6 +13,8 @@ export default function CategoriesSection() {
           subtitle="Give this plant a new home make your garden greener!"
           count="150+ varieties"
           image="/images/plantsimage1.jpg"
+          sideImage="/images/cart1.png"
+          
         />
 
         <CategoryCard
@@ -20,13 +22,15 @@ export default function CategoriesSection() {
           subtitle="Style your Plant beautifully with our collection."
           count="80+ designs"
           image="/images/plotsimage.jpg"
+          sideImage="/images/card2.png"
         />
 
         <CategoryCard
-          title="Accessories"
+          title="Combos"
           subtitle="Give this plant a new home make your garden greener!"
-          count="150+ varieties"
+          count="Plant + Pot set"
           image="/images/combosimage.jpg"
+          sideImage="/images/card3.png"
         />
       </div>
     </section>
