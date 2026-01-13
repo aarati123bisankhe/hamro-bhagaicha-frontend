@@ -3,14 +3,16 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import Link from "next/link";
 import { RegisterData, registerSchema } from "../schema";
 import Button from "./Button";
+import { handleRegister } from "@/lib/actions/auth_action";
 
 export default function RegisterForm() {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
+
 
   const {
     register,
@@ -20,12 +22,24 @@ export default function RegisterForm() {
     resolver: zodResolver(registerSchema),
   });
 
+  const [error, setError] = useState("")
+
   const submit = async (values: RegisterData) => {
-    startTransition(async () => {
-      await new Promise((r) => setTimeout(r, 1000));
-      console.log(values);
-      router.push("/auth/login");
-    });
+    // startTransition(async () => {
+    //   await new Promise((r) => setTimeout(r, 1000));
+    //   console.log(values);
+    //   router.push("/auth/login");
+    // });
+    setError("")
+    try{
+      const response = await handleRegister(values);
+      if(!response.success) {
+        throw new Error(response.message);
+      }
+      startTransition(() => router.push("/login"))
+    }catch(err: any){
+      setError(err.mnessage || "Registration Failed")
+    }
   };
 
   const inputStyle = {
