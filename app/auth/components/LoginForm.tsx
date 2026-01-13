@@ -37,7 +37,7 @@ export default function LoginForm() {
 
   return (
     <form onSubmit={handleSubmit(submit)} className="space-y-4">
-      {/* HEADER */}
+     
       <h1
         className="text-4xl font-bold text-center mb-16"
         style={{ fontFamily: "var(--font-abhaya)", color: "#072010ff" }}
@@ -47,7 +47,7 @@ export default function LoginForm() {
 
       <h2 className="text-lg font-semibold text-[#063c19ff]">Login</h2>
 
-      {/* EMAIL */}
+     
       <div>
         <input
           type="email"
@@ -59,7 +59,6 @@ export default function LoginForm() {
         {errors.email && <p className="text-xs text-red-600">{errors.email.message}</p>}
       </div>
 
-      {/* PASSWORD */}
       <div>
         <input
           type="password"
@@ -71,7 +70,6 @@ export default function LoginForm() {
         {errors.password && <p className="text-xs text-red-600">{errors.password.message}</p>}
       </div>
 
-      {/* FORGOT PASSWORD */}
       <div className="w-full text-right">
         <span
           className="text-sm hover:underline cursor-pointer"
@@ -82,7 +80,6 @@ export default function LoginForm() {
         </span>
       </div>
 
-      {/* LOGIN BUTTON */}
       <Button
         type="submit"
         style={{
@@ -97,7 +94,6 @@ export default function LoginForm() {
         {pending ? "Logging in..." : "Login"}
       </Button>
 
-      {/* BOTTOM LINK */}
       <p className="text-center text-2 text-gray-900">
         Don’t have an account?{" "}
         <Link
