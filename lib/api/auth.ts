@@ -14,3 +14,16 @@ export const register = async (registrationData: any) => {
   }
 
 }
+
+export const login = async (loginData: any) => {
+    try{
+        const response = await axios.post(API.Auth.LOGIN, loginData);
+        return response.data; 
+    }catch(err: Error | any){
+        throw new Error(
+            err.response?.data?.message 
+            || err.message 
+            ||  'login failed'
+        )
+    }
+}

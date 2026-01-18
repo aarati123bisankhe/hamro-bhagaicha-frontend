@@ -38,7 +38,7 @@ export default function RegisterForm() {
       }
       startTransition(() => router.push("/login"))
     }catch(err: any){
-      setError(err.mnessage || "Registration Failed")
+      setError(err.message || "Registration Failed")
     }
   };
 
