@@ -7,6 +7,7 @@ import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { LoginData, loginSchema } from "../schema";
 import Button from "./Button";
+import { handleLogin } from "@/lib/actions/auth_action";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -21,12 +22,24 @@ export default function LoginForm() {
   });
 
   const submit = async (values: LoginData) => {
-    startTransition(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log(values);
-      router.push("/dashboard");
-    });
-  };
+  //   startTransition(async () => {
+  //     await new Promise((resolve) => setTimeout(resolve, 1000));
+  //     console.log(values);
+  //     router.push("/dashboard");
+  //   });
+  // };
+
+  setError("")
+      try{
+        const response = await handleLogin(values);
+        if(!response.success) {
+          throw new Error(response.message);
+        }
+        startTransition(() => router.push("/dashboard"))
+      }catch(err: any){
+        setError(err.message || "login Failed")
+      }
+    };
 
   const inputStyle = {
     backgroundColor: "#b4c0aeff",
@@ -106,5 +119,9 @@ export default function LoginForm() {
       </p>
     </form>
   );
+}
+
+function setError(arg0: string) {
+  throw new Error("Function not implemented.");
 }
 
