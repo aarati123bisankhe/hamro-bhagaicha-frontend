@@ -1,5 +1,3 @@
-//make the file in the lib the cookie.ts
-
 "use server"
 
 import { cookies }  from 'next/headers';
@@ -14,8 +12,6 @@ export const getAuthToken = async () => {
 }
 export const setUserData = async (userData: any) => {
     const cookieStore = await cookies();
-    // cookie can only store string values
-    // so we need to stringify the user data
     cookieStore.set(
         { 
             name: 'user_data', 
