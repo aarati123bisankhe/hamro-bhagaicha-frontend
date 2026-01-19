@@ -156,7 +156,7 @@ export default function LoginForm() {
   });
 
   const submit = async (values: LoginData) => {
-    setError(""); // <-- Reset error before submit
+    setError(""); 
     try {
       const response = await handleLogin(values);
       if (!response.success) {
@@ -164,7 +164,7 @@ export default function LoginForm() {
       }
       startTransition(() => router.push("/dashboard"));
     } catch (err: any) {
-      setError(err.message || "Login Failed"); // <-- Display backend error
+      setError(err.message || "Login Failed");
     }
   };
 

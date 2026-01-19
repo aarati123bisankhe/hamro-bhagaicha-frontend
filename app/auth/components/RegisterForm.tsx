@@ -241,7 +241,7 @@ export default function RegisterForm() {
       <div>
         <input
           placeholder="Phone Number"
-          {...register("phoneNumber")} // <-- match backend
+          {...register("phoneNumber")}
           className="w-full px-4 py-3 mb-3 rounded-lg border border-gray-300"
           style={inputStyle}
         />
