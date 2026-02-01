@@ -1,3 +1,5 @@
+import { div } from "framer-motion/client";
+
 interface ProfileSidebarProps {
   open: boolean;
   onClose: () => void;
@@ -19,7 +21,7 @@ export default function ProfileSidebar({ open, onClose }: ProfileSidebarProps) {
 
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="font-bold text-lg text-[#2f5d3a]">Profile</h2>
+          <h2 className="font-bold text-lg text-[#2ff 5d3a]">Profile</h2>
           <button onClick={onClose}>✕</button>
         </div>
 
