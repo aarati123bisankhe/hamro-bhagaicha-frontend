@@ -19,7 +19,34 @@ export const login = async (loginData: any) => {
     return response.data;
   } catch (err: any) {
     throw new Error(
-      err.response?.data?.message || err.message || "Login Failed"
+      err.response?.data?.message || err.message || "Login Failed" );
+  }
+};
+
+export const whoAmI = async () => {
+    try{
+        const response = await axios.get(API.Auth.WHOAMI);
+    return response.data;
+  } catch (error: Error | any) {
+    throw new Error(error.response?.data?.message
+      || error.message || 'Whoami failed');
+  }
+};
+
+export const updateProfile = async (profileData: any) => {
+  try {
+    const response = await axios.put(
+      API.Auth.UPDATEPROFILE,
+      profileData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data', // for file upload/multer
+        }
+      }
     );
+    return response.data;
+  } catch (error: Error | any) {
+    throw new Error(error.response?.data?.message
+      || error.message || 'Update profile failed');
   }
 };
