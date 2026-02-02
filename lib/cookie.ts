@@ -2,6 +2,19 @@
 
 import { cookies }  from 'next/headers';
 
+interface userData{
+    id: string;
+    name: string;
+    email: string;
+    role: string;
+    createdAt: string;
+    updatedAt: string;
+    [key: string]: any;
+    profileUrl?: string;
+
+}
+
+
 export const setAuthToken = async (token: string) => {
     const cookieStore = await cookies();
     cookieStore.set({name: 'auth_token', value: token})

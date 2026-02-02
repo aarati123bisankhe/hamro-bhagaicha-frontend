@@ -2,45 +2,46 @@
 
 // import { useForm } from "react-hook-form";
 // import { zodResolver } from "@hookform/resolvers/zod";
-// import { useRouter } from "next/navigation";
-// import { useState, useTransition } from "react";
 // import Link from "next/link";
-// import { RegisterData, registerSchema } from "../schema";
+// import { useTransition } from "react";
+// import { useRouter } from "next/navigation";
+// import { LoginData, loginSchema } from "../schema";
 // import Button from "./Button";
-// import { handleRegister } from "@/lib/actions/auth_action";
+// import { useState } from "react";
 
-// export default function RegisterForm() {
+// import { handleLogin } from "@/lib/actions/auth_action";
+
+// export default function LoginForm() {
 //   const router = useRouter();
 //   const [pending, startTransition] = useTransition();
-
 
 //   const {
 //     register,
 //     handleSubmit,
 //     formState: { errors, isSubmitting },
-//   } = useForm<RegisterData>({
-//     resolver: zodResolver(registerSchema),
+//   } = useForm<LoginData>({
+//     resolver: zodResolver(loginSchema),
 //   });
 
-//   const [error, setError] = useState("")
+//   const submit = async (values: LoginData) => {
+//   //   startTransition(async () => {
+//   //     await new Promise((resolve) => setTimeout(resolve, 1000));
+//   //     console.log(values);
+//   //     router.push("/dashboard");
+//   //   });
+//   // };
 
-//   const submit = async (values: RegisterData) => {
-//     // startTransition(async () => {
-//     //   await new Promise((r) => setTimeout(r, 1000));
-//     //   console.log(values);
-//     //   router.push("/auth/login");
-//     // });
-//     setError("")
-//     try{
-//       const response = await handleRegister(values);
-//       if(!response.success) {
-//         throw new Error(response.message);
+//   setError("")
+//       try{
+//         const response = await handleLogin(values);
+//         if(!response.success) {
+//           throw new Error(response.message);
+//         }
+//         startTransition(() => router.push("/dashboard"))
+//       }catch(err: any){
+//         setError(err.message || "login Failed")
 //       }
-//       startTransition(() => router.push("/auth/login"))
-//     }catch(err: any){
-//       setError(err.message || "Registration Failed")
-//     }
-//   };
+//     };
 
 //   const inputStyle = {
 //     backgroundColor: "#b4c0aeff",
@@ -51,6 +52,7 @@
 
 //   return (
 //     <form onSubmit={handleSubmit(submit)} className="space-y-4">
+     
 //       <h1
 //         className="text-4xl font-bold text-center mb-16"
 //         style={{ fontFamily: "var(--font-abhaya)", color: "#072010ff" }}
@@ -58,20 +60,12 @@
 //         Hamro Bhagaicha 🌿
 //       </h1>
 
-//       <h2 className="text-lg font-semibold text-[#063c19ff]">Sign Up</h2>
+//       <h2 className="text-lg font-semibold text-[#063c19ff]">Login</h2>
 
+     
 //       <div>
 //         <input
-//           placeholder="Full Name"
-//           {...register("name")}
-//           className="w-full px-4 py-3 rounded-lg border border-gray-300"
-//           style={inputStyle}
-//         />
-//         {errors.name && <p className="text-xs text-red-600">{errors.name.message}</p>}
-//       </div>
-
-//       <div>
-//         <input
+//           type="email"
 //           placeholder="Email"
 //           {...register("email")}
 //           className="w-full px-4 py-3 rounded-lg border border-gray-300"
@@ -91,27 +85,15 @@
 //         {errors.password && <p className="text-xs text-red-600">{errors.password.message}</p>}
 //       </div>
 
-//       <div>
-//         <input
-//           placeholder="Address"
-//           {...register("address")}
-//           className="w-full px-4 py-3 rounded-lg border border-gray-300"
-//           style={inputStyle}
-//         />
-//         {errors.address && <p className="text-xs text-red-600">{errors.address.message}</p>}
+//       <div className="w-full text-right">
+//         <span
+//           className="text-sm hover:underline cursor-pointer"
+//           style={{ color: "#021c71ff" }}
+//           onClick={() => router.push("/auth/forgotpassword")}
+//         >
+//           Forgot Password?
+//         </span>
 //       </div>
-
-//       <div>
-//         <input
-//           placeholder="Number"
-//           {...register("number")}
-//           className="w-full px-4 py-3 mb-3 rounded-lg border border-gray-300"
-//           style={inputStyle}
-//         />
-//         {errors.number && <p className="text-xs text-red-600">{errors.number.message}</p>}
-//       </div>
-
-      
 
 //       <Button
 //         type="submit"
@@ -120,24 +102,29 @@
 //           color: "white",
 //           padding: "12px 192px",
 //           borderRadius: "30px",
+//           width: "100%",
 //         }}
 //         disabled={pending || isSubmitting}
 //       >
-//         {pending ? "Creating account..." : "Sign Up"}
+//         {pending ? "Logging in..." : "Login"}
 //       </Button>
 
 //       <p className="text-center text-2 text-gray-900">
-//         Already have an account?{" "}
+//         Don’t have an account?{" "}
 //         <Link
-//           href="/auth/login"
+//           href="/auth/register"
 //           className="font-semibold hover:underline"
 //           style={{ color: "#020e36ff" }}
 //         >
-//           Login
+//           Create one
 //         </Link>
 //       </p>
 //     </form>
 //   );
+// }
+
+// function setError(arg0: string) {
+//   throw new Error("Function not implemented.");
 // }
 
 
@@ -146,14 +133,16 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
 import Link from "next/link";
-import { registerSchema, RegisterData } from "../schema";
+import { useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { LoginData, loginSchema } from "../schema";
 import Button from "./Button";
-import { handleRegister } from "@/lib/actions/auth_action";
+import { useState } from "react";
 
-export default function RegisterForm() {
+import { handleLogin } from "@/lib/actions/auth_action";
+
+export default function LoginForm() {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState("");
@@ -162,20 +151,20 @@ export default function RegisterForm() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<RegisterData>({
-    resolver: zodResolver(registerSchema),
+  } = useForm<LoginData>({
+    resolver: zodResolver(loginSchema),
   });
 
-  const submit = async (values: RegisterData) => {
-    setError("");
+  const submit = async (values: LoginData) => {
+    setError(""); 
     try {
-      const response = await handleRegister(values);
+      const response = await handleLogin(values);
       if (!response.success) {
         throw new Error(response.message);
       }
-      startTransition(() => router.push("/auth/login"));
+      startTransition(() => router.push("/user/dashboard"));
     } catch (err: any) {
-      setError(err.message || "Registration Failed");
+      setError(err.message || "Login Failed");
     }
   };
 
@@ -195,20 +184,11 @@ export default function RegisterForm() {
         Hamro Bhagaicha 🌿
       </h1>
 
-      <h2 className="text-lg font-semibold text-[#063c19ff]">Sign Up</h2>
+      <h2 className="text-lg font-semibold text-[#063c19ff]">Login</h2>
 
       <div>
         <input
-          placeholder="Full Name"
-          {...register("name")}
-          className="w-full px-4 py-3 rounded-lg border border-gray-300"
-          style={inputStyle}
-        />
-        {errors.name && <p className="text-xs text-red-600">{errors.name.message}</p>}
-      </div>
-
-      <div>
-        <input
+          type="email"
           placeholder="Email"
           {...register("email")}
           className="w-full px-4 py-3 rounded-lg border border-gray-300"
@@ -228,29 +208,17 @@ export default function RegisterForm() {
         {errors.password && <p className="text-xs text-red-600">{errors.password.message}</p>}
       </div>
 
-      <div>
-        <input
-          placeholder="Address"
-          {...register("address")}
-          className="w-full px-4 py-3 rounded-lg border border-gray-300"
-          style={inputStyle}
-        />
-        {errors.address && <p className="text-xs text-red-600">{errors.address.message}</p>}
+      <div className="w-full text-right">
+        <span
+          className="text-sm hover:underline cursor-pointer"
+          style={{ color: "#021c71ff" }}
+          onClick={() => router.push("/forgotpassword")}
+        >
+          Forgot Password?
+        </span>
       </div>
 
-      <div>
-        <input
-          placeholder="Phone Number"
-          {...register("phoneNumber")}
-          className="w-full px-4 py-3 mb-3 rounded-lg border border-gray-300"
-          style={inputStyle}
-        />
-        {errors.phoneNumber && (
-          <p className="text-xs text-red-600">{errors.phoneNumber.message}</p>
-        )}
-      </div>
-
-      {error && <p className="text-xs text-red-600">{error}</p>}
+      {error && <p className="text-xs text-red-600">{error}</p>} {/* <-- Show error */}
 
       <Button
         type="submit"
@@ -259,22 +227,24 @@ export default function RegisterForm() {
           color: "white",
           padding: "12px 192px",
           borderRadius: "30px",
+          width: "100%",
         }}
         disabled={pending || isSubmitting}
       >
-        {pending ? "Creating account..." : "Sign Up"}
+        {pending ? "Logging in..." : "Login"}
       </Button>
 
       <p className="text-center text-2 text-gray-900">
-        Already have an account?{" "}
+        Don’t have an account?{" "}
         <Link
-          href="/auth/login"
+          href="/register"
           className="font-semibold hover:underline"
           style={{ color: "#020e36ff" }}
         >
-          Login
+          Create one
         </Link>
       </p>
     </form>
   );
 }
+

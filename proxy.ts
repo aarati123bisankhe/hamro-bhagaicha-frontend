@@ -18,6 +18,13 @@ export async function proxy(request: NextRequest) {
   const isAdminRoute = adminRoutes.some(route => pathname.startsWith(route));
   const isUserRoute = userRoutes.some(route => pathname.startsWith(route));
 
+   // 🔹 Splash page logic
+  if (pathname === '/' && token && user) {
+    return NextResponse.redirect(
+      new URL(getHomeByRole(user.role), request.url)
+    );
+  }
+
   // 1️⃣ Logged-in users → block auth & landing pages
   if (token && isAuthPage) {
     return NextResponse.redirect(

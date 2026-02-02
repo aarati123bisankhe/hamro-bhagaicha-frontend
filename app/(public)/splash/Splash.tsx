@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import Button from "../components/Button";
+import Button from "../../(auth)/components/Button";
 
 export default function Splash() {
   const router = useRouter();
@@ -57,7 +57,7 @@ export default function Splash() {
 
           <div className="mt-9">
             <Button
-               onClick={() => router.push("/auth/login")}
+               onClick={() => router.push("/login")}
               style={{
                 backgroundColor: "#031039ff",
                 color: "white",
