@@ -1,42 +1,3 @@
-// type Props = {
-//   onEdit: () => void;
-// };
-
-// export default function ProfileInfo({ onEdit }: Props) {
-//   return (
-//     <div className="bg-white p-6 rounded-xl shadow space-y-4">
-//       <div className="flex justify-between items-center">
-//         <h2 className="text-xl font-semibold">Profile Information</h2>
-
-//         <button
-//           onClick={onEdit}
-//           className="px-4 py-2 rounded-lg bg-green-600 text-white"
-//         >
-//           Edit Profile
-//         </button>
-//       </div>
-
-//       <div className="grid grid-cols-2 gap-4 text-sm">
-//         <Info label="Full Name" value="Aarati Sharma" />
-//         <Info label="Email Address" value="aarati.sharma@email.com" />
-//         <Info label="Phone Number" value="+977 9812345678" />
-//         <Info label="Address" value="Kathmandu, Nepal" />
-//       </div>
-//     </div>
-//   );
-// }
-
-// function Info({ label, value }: { label: string; value: string }) {
-//   return (
-//     <div>
-//       <p className="text-gray-500">{label}</p>
-//       <p className="font-medium">{value}</p>
-//     </div>
-//   );
-// }
-
-
-
 "use client";
 
 type Props = {
@@ -80,3 +41,7 @@ function Info({ label, value }: { label: string; value: string }) {
     </div>
   );
 }
+
+
+
+

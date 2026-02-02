@@ -45,26 +45,26 @@ export default function ProfileModal({ user, isOpen, onClose }: Props) {
 
         {/* Profile Avatar */}
         <ProfileAvatar
-          name={`${user.firstName}`}
-          email={user.email}
-          avatarUrl={user.profileUrl}
-          onEdit={() => setIsEditing(true)}
+          profileUrl={user.profileUrl}
         />
 
         {/* Profile Info */}
         <ProfileInfo
-          fullName={`${user.firstName}`}
-          email={user.email}
-          phone={user.phone}
-          address={user.address}
-          onEdit={() => setIsEditing(true)}
+                  fullName={`${user.firstName}`}
+                  email={user.email}
+                  phone={user.phone}
+                  address={user.address}
+                  onEdit={() => setIsEditing(true)}
         />
 
         {/* Edit Form */}
         {isEditing && (
           <EditProfileForm
-            onClose={() => setIsEditing(false)}
-            defaultValues={user}
+                      {...({
+                        onClose: () => setIsEditing(false),
+                        defaultValues: user,
+                        onSave: (data: UpdateUserData) => {}
+                      } as any)}
           />
         )}
       </div>

@@ -1,69 +1,102 @@
 // "use client";
 
 // import Image from "next/image";
+// import { useEffect, useState } from "react";
 
-// export default function ProfileAvatar() {
+// type Props = {
+//   profileUrl?: string | File; // can be a filename or a local File
+//   name?: string;
+//   email: string;
+// };
+
+// export default function ProfileAvatar({ profileUrl, name, email }: Props) {
+//   const [preview, setPreview] = useState<string | null>(null);
+
+//   useEffect(() => {
+//     if (!profileUrl) {
+//       setPreview(null);
+//       return;
+//     }
+
+//     if (typeof profileUrl === "string") {
+//       // Already uploaded file
+//       setPreview(`${process.env.NEXT_PUBLIC_API_URL}/uploads/profile/${profileUrl}`);
+//     } else {
+//       // Local file preview
+//       setPreview(URL.createObjectURL(profileUrl));
+//     }
+
+//     return () => {
+//       if (typeof profileUrl !== "string") URL.revokeObjectURL(preview!);
+//     };
+//   }, [profileUrl]);
+
 //   return (
-//     <div className="flex items-center gap-4 bg-white p-4 rounded-xl shadow">
-//       <div className="relative">
+//     <div className="relative w-32 h-32 -mt-16 rounded-full overflow-hidden border-4 border-white bg-gray-300 flex items-center justify-center text-2xl text-white font-bold">
+//       {preview ? (
 //         <Image
-//           src="/avatar-placeholder.png"
+//           src={preview}
 //           alt="Profile"
-//           width={80}
-//           height={80}
-//           className="rounded-full object-cover"
+//           fill
+//           className="object-cover"
 //         />
-
-//         <button className="absolute bottom-0 right-0 bg-green-600 p-2 rounded-full text-white text-xs">
-//           ✎
-//         </button>
-//       </div>
-
-//       <div>
-//         <h3 className="font-semibold text-lg">Your Name</h3>
-//         <p className="text-gray-500 text-sm">yourname@gmail.com</p>
-//       </div>
+//       ) : (
+//         <span>{name ? name[0].toUpperCase() : "A"}</span>
+//       )}
 //     </div>
 //   );
 // }
 
+// "use client";
+// import Image from "next/image";
 
-"use client";
+// export default function ProfileAvatar({
+//   profileUrl,
+//   name,
+// }: {
+//   profileUrl?: string;
+//   name?: string;
+// }) {
+//   const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+
+//   const isValid =
+//     typeof profileUrl === "string" &&
+//     profileUrl.length > 0;
+
+//   return (
+//     <div className="relative w-32 h-32 rounded-full overflow-hidden border bg-gray-300 flex items-center justify-center text-white text-xl">
+//       {isValid ? (
+//         <Image
+//           src={`${baseUrl}/uploads/profile/${profileUrl}`}
+//           fill
+//           alt="Profile"
+//           className="object-cover"
+//           unoptimized
+//         />
+//       ) : (
+//         <span>{name?.[0] ?? "A"}</span>
+//       )}
+//     </div>
+//   );
+// }
 
 import Image from "next/image";
 
-type Props = {
-  name: string;
-  email: string;
-  avatarUrl?: string;
-  onEdit?: () => void;
-};
-
-export default function ProfileAvatar({ name, email, avatarUrl, onEdit }: Props) {
+export default function ProfileAvatar({
+  profileUrl,
+}: {
+  profileUrl?: string;
+}) {
   return (
-    <div className="flex items-center gap-4 bg-[#c8d9c5] p-4 rounded-xl shadow">
-      <div className="relative">
+    <div className="relative w-32 h-32 -mt-16 rounded-full overflow-hidden border-4 border-white bg-gray-300">
+      {profileUrl && (
         <Image
-          src={avatarUrl || "/avatar-placeholder.png"}
+          src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/profile/${profileUrl}`}
           alt="Profile"
-          width={80}
-          height={80}
-          className="rounded-full object-cover"
+          fill
+          className="object-cover"
         />
-        {onEdit && (
-          <button
-            onClick={onEdit}
-            className="absolute bottom-0 right-0 bg-green-600 p-2 rounded-full text-white text-xs hover:bg-green-700 transition"
-          >
-            ✎
-          </button>
-        )}
-      </div>
-
-      <div>
-        <h3 className="font-semibold text-lg">{name}</h3>
-        <p className="text-gray-500 text-sm">{email}</p>
-      </div>
+      )}
     </div>
   );
 }
