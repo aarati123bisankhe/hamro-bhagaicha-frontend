@@ -40,7 +40,7 @@ export const updateProfile = async (profileData: any) => {
       profileData,
       {
         headers: {
-          'Content-Type': 'multipart/form-data', // for file upload/multer
+          'Content-Type': 'multipart/form-data', 
         }
       }
     );

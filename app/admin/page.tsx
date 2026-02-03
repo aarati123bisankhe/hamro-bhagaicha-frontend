@@ -10,7 +10,6 @@ export default function AdminDashboard() {
       {/* Main Content */}
       <main className="flex-1 ml-3 p-6 bg-gradient-to-br from-green-100 to-gray-400">
 
-        {/* Dashboard Cards */}
         <DashboardCards />
 
       </main>

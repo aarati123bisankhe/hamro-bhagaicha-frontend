@@ -1,24 +1,3 @@
-// "use client";
-
-// import styles from "../styles/Dashboard.module.css";
-
-// export default function Sidebar() {
-//   return (
-//     <aside className={styles.sidebar}>
-//       {/* Changed logo text to "Admin Panel" */}
-//       <h2 className={styles.logo}>Admin Panel</h2>
-//       <ul>
-//         <li className={styles.active}>📊 Dashboard</li>
-//           <li>🛒 Order Management</li>
-//         <li>👥 User Management</li>
-//         <li>🌱 Plant & Plot</li>
-//         <li>📄 Content Management</li>
-//       </ul>
-//     </aside>
-//   );
-// }
-
-
 "use client";
 
 import Link from "next/link";
