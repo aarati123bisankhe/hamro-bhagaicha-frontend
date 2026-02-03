@@ -15,9 +15,9 @@ export default function ProfileSidebar({ open, onClose }: ProfileSidebarProps) {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   const [user, setUser] = useState<UpdateUserData>({
-    fullname: "Aarati",
+    fullName: "Aarati",
     email: "aarati@example.com",
-    phone: "+977 9812345678",
+    phoneNumber: "+977 9812345678",
     address: "Kathmandu, Nepal",
     profileUrl: undefined,
   });
@@ -64,7 +64,7 @@ export default function ProfileSidebar({ open, onClose }: ProfileSidebarProps) {
           </div>
 
           <div>
-            <h3 className="font-semibold">{user.fullname}</h3>
+            <h3 className="font-semibold">{user.fullName}</h3>
             <p className="text-sm text-gray-500">{user.email}</p>
           </div>
         </div>
@@ -79,7 +79,7 @@ export default function ProfileSidebar({ open, onClose }: ProfileSidebarProps) {
                   router.push(item.path);
                   onClose();
                 } else if (item.action) {
-                  item.action(); // open modal immediately
+                  item.action();
                 }
               }}
               className="bg-white p-3 rounded-xl shadow-sm flex justify-between items-center cursor-pointer hover:bg-green-50 transition"
