@@ -1,7 +1,7 @@
 import { createUser, fetchUsers } from "@/lib/api/admin/user";
 
 export const handleCreateUser = async (data: {
-  firstName: string;
+  fullName: string;
   email: string;
   password: string;
   address: string;

@@ -7,7 +7,7 @@ export const fetchUsers = async () => {
 };
 
 export const createUser = async (userData: {
-  firstName: string;
+  fullName: string;
   email: string;
   password: string;
   address: string;

@@ -18,7 +18,7 @@ export default function CreateUserModal({
 
       <div className="fixed inset-0 z-50 flex items-center justify-center">
         <div className="bg-white w-full max-w-md rounded-md shadow p-6">
-          <h2 className="text-xl font-semibold mb-4">
+          <h2 className="text-xl font-semibold mb-4 text-green-600">
             Create New User
           </h2>
 

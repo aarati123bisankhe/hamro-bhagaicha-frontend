@@ -173,7 +173,7 @@ export default function RegisterForm() {
       if (!response.success) {
         throw new Error(response.message);
       }
-      startTransition(() => router.push("/auth/login"));
+      startTransition(() => router.push("/user/login"));
     } catch (err: any) {
       setError(err.message || "Registration Failed");
     }

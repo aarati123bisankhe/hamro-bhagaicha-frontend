@@ -26,12 +26,18 @@ export default function CreateUserForm({
   const onSubmit = async (data: AdminCreateUserData) => {
     // map form data to the API shape expected by handleCreateUser
     const payload = {
-      firstName: (data as any).name ?? (data as any).firstName ?? "",
-      email: data.email,
-      password: data.password,
-      address: (data as any).address ?? "",
-      phoneNumber: data.phoneNumber,
-      role: data.role,
+    //   firstName: (data as any).name ?? (data as any).firstName ?? "",
+    //   email: data.email,
+    //   password: data.password,
+    //   address: (data as any).address ?? "",
+    //   phoneNumber: data.phoneNumber,
+    //   role: data.role,
+        fullname: data.fullname,    
+        email: data.email,
+        password: data.password,
+        address: data.address,
+        phoneNumber: data.phoneNumber,
+        role: data.role,
     };
 
     const res = await handleCreateUser(payload as any);
@@ -47,14 +53,14 @@ export default function CreateUserForm({
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 text-black">
 
       {/* Name */}
       <div>
         <input
           {...register("fullname")}
           placeholder="Full Name"
-          className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
+          className="w-full border border-gray-300 p-2 text-black rounded focus:outline-none focus:ring-2 focus:ring-green-500"
         />
         {errors.fullname && (
           <p className="text-red-500 text-sm mt-1">{errors.fullname.message}</p>

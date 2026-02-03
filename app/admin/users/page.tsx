@@ -1,17 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Key, useEffect, useState } from "react";
 import UsersTable from "./_components/UsersTable";
 import CreateUserModal from "./_components/CreateUserModel";
 import { getUsers } from "@/lib/actions/admin/user_action";
 
 // Define your admin user type
 export type AdminUser = {
-  _id: string;
-  name: string;
-  email: string;
-  phoneNumber: string;
-  role: "user" | "admin";
+    _id: Key | null | undefined;
+    fullName: string;
+    lastName: string;
+    email: string;
+    phoneNumber: string;
+    role: "user" | "admin";
 };
 
 export default function UsersPage() {
@@ -29,7 +30,7 @@ export default function UsersPage() {
   }, []);
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6 p-6 text-black">
       {/* Header */}
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-gray-800">Users</h1>

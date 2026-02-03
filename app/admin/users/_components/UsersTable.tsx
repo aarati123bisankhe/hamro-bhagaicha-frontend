@@ -17,7 +17,7 @@ export default function UsersTable({ users }: { users: AdminUser[] }) {
         <tbody>
           {users.map((u) => (
             <tr key={u._id} className="border-t hover:bg-gray-50">
-              <td className="p-3">{u.name}</td>
+              <td className="p-3">{u.fullName}</td>
               <td className="p-3">{u.email}</td>
               <td className="p-3">{u.phoneNumber}</td>
               <td className="p-3 capitalize">{u.role}</td>

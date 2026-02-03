@@ -29,11 +29,16 @@ export default function AdminSidebar() {
   const pathname = usePathname();
   const router = useRouter();
 
-  const linkClass = (path: string) =>
-    pathname === path
-      ? "bg-green-600 text-white"
-      : "text-gray-700 hover:bg-green-100";
+  // const linkClass = (path: string) =>
+  //   pathname === path
+  //     ? "bg-green-600 text-white"
+  //     : "text-gray-700 hover:bg-green-100";
 
+  const linkClass = (path: string) =>
+  pathname === path
+    ? "bg-green-600 text-white" // active link
+    : "text-white hover:bg-green-700"; // inactive link with darker green hover
+    
   const handleLogout = async () => {
     await clearAuthCookies();
     router.push("/login");
