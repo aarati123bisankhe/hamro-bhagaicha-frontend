@@ -52,12 +52,12 @@ export default function CreateUserForm({
       {/* Name */}
       <div>
         <input
-          {...register("name")}
+          {...register("fullname")}
           placeholder="Full Name"
           className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
         />
-        {errors.name && (
-          <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
+        {errors.fullname && (
+          <p className="text-red-500 text-sm mt-1">{errors.fullname.message}</p>
         )}
       </div>
 

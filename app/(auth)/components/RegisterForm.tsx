@@ -200,11 +200,11 @@ export default function RegisterForm() {
       <div>
         <input
           placeholder="Full Name"
-          {...register("name")}
+          {...register("fullName")}
           className="w-full px-4 py-3 rounded-lg border border-gray-300"
           style={inputStyle}
         />
-        {errors.name && <p className="text-xs text-red-600">{errors.name.message}</p>}
+        {errors.fullName && <p className="text-xs text-red-600">{errors.fullName.message}</p>}
       </div>
 
       <div>

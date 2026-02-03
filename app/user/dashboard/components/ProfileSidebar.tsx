@@ -94,7 +94,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import ProfileModal from "../../profile/_components/ProfileModal";
+// import ProfileModal from "../../profile/_components/ProfileModal";
 import { UpdateUserData } from "@/app/user/profile/schema";
 
 interface ProfileSidebarProps {
@@ -107,7 +107,7 @@ export default function ProfileSidebar({ open, onClose }: ProfileSidebarProps) {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   const [user, setUser] = useState<UpdateUserData>({
-    firstName: "Aarati",
+    fullname: "Aarati",
     email: "aarati@example.com",
     phone: "+977 9812345678",
     address: "Kathmandu, Nepal",
@@ -117,7 +117,8 @@ export default function ProfileSidebar({ open, onClose }: ProfileSidebarProps) {
   if (!open) return null;
 
   const menuItems = [
-    { label: "My Profile", action: () => setIsProfileOpen(true) },
+    // { label: "My Profile", action: () => setIsProfileOpen(true) },
+    { label: "My Profile", action: () => router.push("/user/profile") },
     { label: "My Plants", path: "/user/plants" },
     { label: "Orders", path: "/orders" },
     { label: "Wishlist", path: "/wishlist" },
@@ -155,7 +156,7 @@ export default function ProfileSidebar({ open, onClose }: ProfileSidebarProps) {
           </div>
 
           <div>
-            <h3 className="font-semibold">{user.firstName}</h3>
+            <h3 className="font-semibold">{user.fullname}</h3>
             <p className="text-sm text-gray-500">{user.email}</p>
           </div>
         </div>
@@ -191,13 +192,13 @@ export default function ProfileSidebar({ open, onClose }: ProfileSidebarProps) {
       </div>
 
       {/* Profile Modal */}
-      {isProfileOpen && (
+      {/* {isProfileOpen && (
         <ProfileModal
           isOpen={isProfileOpen}
           onClose={() => setIsProfileOpen(false)}
           user={user}
         />
-      )}
+      )} */}
     </>
   );
 }
