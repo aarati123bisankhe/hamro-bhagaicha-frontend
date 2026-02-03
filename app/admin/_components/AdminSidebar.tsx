@@ -29,16 +29,11 @@ export default function AdminSidebar() {
   const pathname = usePathname();
   const router = useRouter();
 
-  // const linkClass = (path: string) =>
-  //   pathname === path
-  //     ? "bg-green-600 text-white"
-  //     : "text-gray-700 hover:bg-green-100";
-
   const linkClass = (path: string) =>
   pathname === path
-    ? "bg-green-600 text-white" // active link
-    : "text-white hover:bg-green-700"; // inactive link with darker green hover
-    
+    ? "bg-green-600 text-white"
+    : "text-white hover:bg-green-700";
+
   const handleLogout = async () => {
     await clearAuthCookies();
     router.push("/login");
@@ -47,12 +42,10 @@ export default function AdminSidebar() {
 
   return (
     <aside className="w-64 bg-[#2A383B] text-white flex flex-col min-h-screen">
-      {/* Logo */}
       <div className="p-6 font-bold text-xl text-green-400">
         Admin Panel
       </div>
 
-      {/* Navigation */}
       <nav className="flex-1 px-3 space-y-1">
         <Link href="/admin" className={`block px-4 py-2 rounded ${linkClass("/admin")}`}>
           📊 Dashboard
@@ -75,7 +68,6 @@ export default function AdminSidebar() {
         </Link>
       </nav>
 
-      {/* Logout */}
       <div className="p-4 border-t border-gray-700">
         <button
           onClick={handleLogout}

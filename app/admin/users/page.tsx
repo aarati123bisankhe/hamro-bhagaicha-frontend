@@ -5,7 +5,6 @@ import UsersTable from "./_components/UsersTable";
 import CreateUserModal from "./_components/CreateUserModel";
 import { getUsers } from "@/lib/actions/admin/user_action";
 
-// Define your admin user type
 export type AdminUser = {
     _id: Key | null | undefined;
     fullName: string;
@@ -19,9 +18,8 @@ export default function UsersPage() {
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [open, setOpen] = useState(false);
 
-  // Load users from backend
   const loadUsers = async () => {
-    const res = await getUsers(); // should return AdminUser[]
+    const res = await getUsers();
     setUsers(res);
   };
 
@@ -31,7 +29,6 @@ export default function UsersPage() {
 
   return (
     <div className="space-y-6 p-6 text-black">
-      {/* Header */}
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-gray-800">Users</h1>
         <button
@@ -42,10 +39,8 @@ export default function UsersPage() {
         </button>
       </div>
 
-      {/* Users Table */}
       <UsersTable users={users} />
 
-      {/* Create User Modal */}
       {open && (
         <CreateUserModal
           onClose={() => setOpen(false)}

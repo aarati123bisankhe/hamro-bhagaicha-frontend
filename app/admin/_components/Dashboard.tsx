@@ -2,7 +2,6 @@ export default function DashboardCards() {
   return (
     <div className="space-y-3">
 
-      {/* Stats Row */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <div className="bg-white p-6 rounded-md shadow text-center text-black">
           <h2 className="font-semibold  mb-2">Total Revenue (Today)</h2>
@@ -27,7 +26,6 @@ export default function DashboardCards() {
         </div>
       </div>
 
-      {/* Recently Orders */}
       <div className="space-y-4 mt-8">
         <h2 className="font-semibold text-lg text-green-600">Recently Orders</h2>
 

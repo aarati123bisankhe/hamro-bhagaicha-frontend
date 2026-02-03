@@ -19,7 +19,7 @@ export default function AdminDashboard() {
 }
 
 export type AdminUser = {
-    firtstName: string;
+    fullName: string;
     lastName: string;
     email: string;
     phoneNumber: string;

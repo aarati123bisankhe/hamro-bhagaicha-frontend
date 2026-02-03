@@ -24,20 +24,13 @@ export default function CreateUserForm({
   });
 
   const onSubmit = async (data: AdminCreateUserData) => {
-    // map form data to the API shape expected by handleCreateUser
-    const payload = {
-    //   firstName: (data as any).name ?? (data as any).firstName ?? "",
-    //   email: data.email,
-    //   password: data.password,
-    //   address: (data as any).address ?? "",
-    //   phoneNumber: data.phoneNumber,
-    //   role: data.role,
-        fullname: data.fullname,    
-        email: data.email,
-        password: data.password,
-        address: data.address,
-        phoneNumber: data.phoneNumber,
-        role: data.role,
+  const payload = {
+  fullName: data.fullName,
+  email: data.email,
+  password: data.password,
+  address: data.address,
+  phoneNumber: data.phoneNumber,
+  role: data.role,
     };
 
     const res = await handleCreateUser(payload as any);
@@ -55,19 +48,17 @@ export default function CreateUserForm({
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 text-black">
 
-      {/* Name */}
       <div>
         <input
-          {...register("fullname")}
+          {...register("fullName")}
           placeholder="Full Name"
           className="w-full border border-gray-300 p-2 text-black rounded focus:outline-none focus:ring-2 focus:ring-green-500"
         />
-        {errors.fullname && (
-          <p className="text-red-500 text-sm mt-1">{errors.fullname.message}</p>
+        {errors.fullName && (
+          <p className="text-red-500 text-sm mt-1">{errors.fullName.message}</p>
         )}
       </div>
 
-      {/* Email */}
       <div>
         <input
           {...register("email")}
@@ -79,7 +70,6 @@ export default function CreateUserForm({
         )}
       </div>
 
-      {/* Password */}
       <div>
         <input
           type="password"
@@ -92,7 +82,6 @@ export default function CreateUserForm({
         )}
       </div>
 
-      {/* Phone Number */}
       <div>
         <input
           {...register("phoneNumber")}
@@ -104,7 +93,19 @@ export default function CreateUserForm({
         )}
       </div>
 
-      {/* Role */}
+      <div>
+  <input
+    {...register("address")}
+    placeholder="Address"
+    className="w-full border border-gray-300 p-2 rounded text-black focus:outline-none focus:ring-2 focus:ring-green-500"
+  />
+  {errors.address && (
+    <p className="text-red-500 text-sm mt-1">{errors.address.message}</p>
+  )}
+</div>
+
+
+
       <div>
         <select
           {...register("role")}
@@ -115,7 +116,6 @@ export default function CreateUserForm({
         </select>
       </div>
 
-      {/* Actions */}
       <div className="flex justify-end gap-3 pt-4">
         <button
           type="button"
