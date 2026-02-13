@@ -13,6 +13,15 @@ export const adminCreateUserSchema = z.object({
     .min(10, { message: "Enter a valid number" })
     .max(15, { message: "Number too long" }),
      role: z.enum(["user", "admin"]),
+     profileUrl: z
+             .instanceof(File)
+             .optional()
+             .refine((file) => !file || file.size <= MAX_FILE_SIZE, {
+                 message: "Max file size is 5MB",
+             })
+             .refine((file) => !file || ACCEPTED_IMAGE_TYPES.includes(file.type), {
+                 message: "Only .jpg, .jpeg, .png and .webp formats are supported",
+             }),
 });
 
 export type AdminCreateUserData = z.infer<typeof adminCreateUserSchema>;
