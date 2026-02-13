@@ -6,6 +6,7 @@ import CreateUserModal from "./_components/CreateUserModel";
 import { getUsers } from "@/lib/actions/admin/user_action";
 
 export type AdminUser = {
+    profileUrl: any;
     _id: Key | null | undefined;
     fullName: string;
     lastName: string;
