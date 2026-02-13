@@ -22,7 +22,7 @@ export default function ProfileInfo({
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-        <Info label="Full Name" value={user.fullName} />
+        <Info label="Full Name" value={user.fullname} />
         <Info label="Email Address" value={user.email} />
         <Info label="Phone Number" value={user.phoneNumber} />
         <Info label="Address" value={user.address} />

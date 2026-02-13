@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 // import ProfileModal from "../../profile/_components/ProfileModal";
 import { UpdateUserData } from "@/app/user/profile/schema";
+import { clearAuthCookies } from "@/lib/cookie";
 
 interface ProfileSidebarProps {
   open: boolean;
@@ -15,7 +16,7 @@ export default function ProfileSidebar({ open, onClose }: ProfileSidebarProps) {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   const [user, setUser] = useState<UpdateUserData>({
-    fullName: "Aarati",
+    fullname: "Aarati",
     email: "aarati@example.com",
     phoneNumber: "+977 9812345678",
     address: "Kathmandu, Nepal",
@@ -33,6 +34,12 @@ export default function ProfileSidebar({ open, onClose }: ProfileSidebarProps) {
     { label: "Care Schedule", path: "/care-schedule" },
     { label: "Settings", path: "/settings" },
   ];
+
+  const handleLogout = async () => {
+    await clearAuthCookies();
+    router.push("/login");
+    router.refresh();
+  }
 
   return (
     <>
@@ -64,7 +71,7 @@ export default function ProfileSidebar({ open, onClose }: ProfileSidebarProps) {
           </div>
 
           <div>
-            <h3 className="font-semibold">{user.fullName}</h3>
+            <h3 className="font-semibold">{user.fullname}</h3>
             <p className="text-sm text-gray-500">{user.email}</p>
           </div>
         </div>
@@ -92,7 +99,7 @@ export default function ProfileSidebar({ open, onClose }: ProfileSidebarProps) {
 
         {/* Logout */}
         <button
-          onClick={() => router.push("/login")}
+          onClick={handleLogout}
           className="bg-[#e3ebdf] p-3 rounded-xl shadow-sm flex items-center justify-center hover:bg-green-50 text-red-600 font-medium mt-4 transition"
         >
           🚪 Logout

@@ -186,15 +186,23 @@ export default function EditProfileForm({
   user: any;
   onCancel: () => void;
 }) {
-  const backendUrl = process.env.NEXT_PUBLIC_API_UR;
+  const backendUrl = process.env.NEXT_PUBLIC_API_URL;
 
+  // const [form, setForm] = useState<UpdateUserData>({
+  //   fullname: user.fullName,
+  //   email: user.email,
+  //   phoneNumber: user.phone,
+  //   address: user.address,
+  //   profileUrl: undefined,
+  // });
   const [form, setForm] = useState<UpdateUserData>({
-    fullName: user.fullName,
-    email: user.email,
-    phoneNumber: user.phone,
-    address: user.address,
-    profileUrl: undefined,
-  });
+  fullname: user.fullName ?? "",
+  email: user.email ?? "",
+  phoneNumber: user.phone ?? "",
+  address: user.address ?? "",
+  profileUrl: undefined,
+});
+
 
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -220,15 +228,21 @@ export default function EditProfileForm({
 
     try {
       const formData = new FormData();
-      formData.append("fullName", parsed.data.fullName);
-      formData.append("email", parsed.data.email);
-      formData.append("phoneNumber", parsed.data.phoneNumber);
-      formData.append("address", parsed.data.address);
+      // formData.append("fullname", parsed.data.fullname);
+      // formData.append("email", parsed.data.email);
+      // formData.append("phoneNumber", parsed.data.phoneNumber);
+      // formData.append("address", parsed.data.address);
+      // formData.append("role", user.role);
+      formData.append("fullname", user.fullname);
+      formData.append("email", user.email);
+      formData.append("phoneNumber", user.phoneNumber);
+      formData.append("address", user.address);
       formData.append("role", user.role);
 
-      if (parsed.data.profileUrl instanceof File) {
-        formData.append("profileUrl", parsed.data.profileUrl);
-      }
+      // if (parsed.data.profileUrl instanceof File) {
+      //   formData.append("profileUrl", parsed.data.profileUrl);
+      // }
+      if(parsed.data.profileUrl) formData.append("profileUrl",parsed.data.profileUrl);
 
       const res = await handleUpdateProfile(formData);
       if (!res.success) throw new Error(res.message || "Update failed");
@@ -255,32 +269,36 @@ export default function EditProfileForm({
 
         <h2 className="text-xl font-semibold text-black">Edit Profile</h2>
 
-        <Input
-          label="FullName"
-          value={form.fullName}
+        <input
+          // label="FullName"
+          placeholder= 'FullName'
+          value={form.fullname}
           onChange={(e: any) =>
-            setForm({ ...form, fullName: e.target.value })
+            setForm({ ...form, fullname: e.target.value })
           }
         />
 
-        <Input
-          label="Email"
+        <input
+          // label="Email"
+          placeholder="Email"
           value={form.email}
           onChange={(e: any) =>
             setForm({ ...form, email: e.target.value })
           }
         />
 
-        <Input
-          label="PhoneNumber"
+        <input
+          // label="PhoneNumber"
+          placeholder='PhoneNumber'
           value={form.phoneNumber}
           onChange={(e: any) =>
             setForm({ ...form, phoneNumber: e.target.value })
           }
         />
 
-        <Input
-          label="Address"
+        <input
+          // label="Address"
+          placeholder="Address"
           value={form.address}
           onChange={(e: any) =>
             setForm({ ...form, address: e.target.value })
@@ -331,17 +349,18 @@ export default function EditProfileForm({
   );
 }
 
-function Input({ label, ...props }: any) {
-  return (
-    <div>
-      <label className="text-sm text-black">{label}</label>
-      <input
-        {...props}
-        className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 text-black"
-      />
-    </div>
-  );
-}
+// function Input({ label, ...props }: FormData) {
+// function Input({ label, ...props }: { label: string; [key: string]: any }) {
+//   return (
+//     <div>
+//       <label className="text-sm text-black">{label}</label>
+//       <input
+//         {...props}
+//         className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 text-black"
+//       />
+//     </div>
+//   );
+// }
 
 
 
