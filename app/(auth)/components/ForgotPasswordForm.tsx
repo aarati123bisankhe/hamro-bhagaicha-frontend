@@ -19,21 +19,12 @@ export default function ForgotPasswordForm() {
     resolver: zodResolver(forgotPasswordSchema),
   });
 
-  // const submit = async (values: ForgotPasswordData) => {
-  //   startTransition(async () => {
-  //     await new Promise((r) => setTimeout(r, 1000));
-  //     console.log("Forgot password request for:", values.email);
-  //     router.push("/login");
-  //   });
-  // };
-
   const submit = async (values: ForgotPasswordData) => {
   startTransition(async () => {
     await new Promise((r) => setTimeout(r, 1000));
 
     console.log("Forgot password request for:", values.email);
 
-    // ✅ go to change password page
     router.push("/changepassword");
   });
 };
