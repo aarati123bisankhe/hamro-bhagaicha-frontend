@@ -19,13 +19,24 @@ export default function ForgotPasswordForm() {
     resolver: zodResolver(forgotPasswordSchema),
   });
 
+  // const submit = async (values: ForgotPasswordData) => {
+  //   startTransition(async () => {
+  //     await new Promise((r) => setTimeout(r, 1000));
+  //     console.log("Forgot password request for:", values.email);
+  //     router.push("/login");
+  //   });
+  // };
+
   const submit = async (values: ForgotPasswordData) => {
-    startTransition(async () => {
-      await new Promise((r) => setTimeout(r, 1000));
-      console.log("Forgot password request for:", values.email);
-      router.push("/auth/login");
-    });
-  };
+  startTransition(async () => {
+    await new Promise((r) => setTimeout(r, 1000));
+
+    console.log("Forgot password request for:", values.email);
+
+    // ✅ go to change password page
+    router.push("/changepassword");
+  });
+};
 
   return (
     <form onSubmit={handleSubmit(submit)} className="space-y-4">
@@ -33,7 +44,7 @@ export default function ForgotPasswordForm() {
        <div className="relative mb-5">
      <span
      className="absolute left-0 cursor-pointer text-xl font-medium text-black"
-     onClick={() => router.push("/auth/login")}
+     onClick={() => router.push("/login")}
     >
       &lt;
     </span>

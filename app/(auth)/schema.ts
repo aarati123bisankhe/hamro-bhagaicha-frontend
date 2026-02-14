@@ -28,3 +28,16 @@ export const registerSchema = z.object({
 
 export type RegisterData = z.infer<typeof registerSchema>;
 
+
+export const changePasswordSchema = z
+  .object({
+    password: z.string().min(6, "Minimum 6 characters"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
+
+export type ChangePasswordData = z.infer<typeof changePasswordSchema>;
+
