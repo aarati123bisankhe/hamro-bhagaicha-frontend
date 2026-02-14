@@ -32,13 +32,11 @@ export default function ChangePasswordForm() {
   };
 
   return (
-    /* CENTER WHOLE FORM */
     <div className="flex justify-center items-center w-full">
       <form
         onSubmit={handleSubmit(submit)}
         className="space-y-6 w-full max-w-sm"
       >
-        {/* HEADER */}
         <div className="relative mb-20">
           <span
             className="absolute left-0 cursor-pointer text-xl font-medium text-black"
@@ -52,7 +50,6 @@ export default function ChangePasswordForm() {
           </h2>
         </div>
 
-        {/* NEW PASSWORD */}
         <div>
           <input
             type="password"
@@ -73,7 +70,6 @@ export default function ChangePasswordForm() {
           )}
         </div>
 
-        {/* CONFIRM PASSWORD */}
         <div>
           <input
             type="password"
@@ -94,7 +90,6 @@ export default function ChangePasswordForm() {
           )}
         </div>
 
-        {/* BUTTON */}
         <Button
           type="submit"
           disabled={isSubmitting || pending}
