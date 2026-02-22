@@ -38,7 +38,7 @@ const pots: PotItem[] = [
     price: 450,
     category: "All Pot",
     image:
-      "https://images.unsplash.com/photo-1617098474202-0d0d7f60b4c7?auto=format&fit=crop&w=900&q=80",
+      "/images/rustic.png",
   },
   {
     name: "Geometric Modern Planter",
@@ -48,7 +48,7 @@ const pots: PotItem[] = [
     price: 1200,
     category: "All Pot",
     image:
-      "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=900&q=80",
+      "/images/geometric.png",
   },
   {
     name: "Sage Green Ceramic Set",
@@ -58,7 +58,7 @@ const pots: PotItem[] = [
     price: 1500,
     category: "All Pot",
     image:
-      "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&w=900&q=80",
+      "/images/sage.png",
   },
   {
     name: "Textured Concrete Planter",
@@ -68,7 +68,7 @@ const pots: PotItem[] = [
     price: 950,
     category: "All Pot",
     image:
-      "https://images.unsplash.com/photo-1463320726281-696a485928c7?auto=format&fit=crop&w=900&q=80",
+      "/images/Textured.png",
   },
   {
     name: "Glazed Blue Ceramic",
@@ -78,7 +78,7 @@ const pots: PotItem[] = [
     price: 1100,
     category: "All Pot",
     image:
-      "https://images.unsplash.com/photo-1532499016263-f2f6f3f3b5f1?auto=format&fit=crop&w=900&q=80",
+      "/images/Glazed.png",
   },
   {
     name: "Woven Seagrass Basket",
@@ -88,7 +88,7 @@ const pots: PotItem[] = [
     price: 750,
     category: "All Pot",
     image:
-      "https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&w=900&q=80",
+      "/images/basket.png",
   },
   {
     name: "Marble Effect Ceramic",
@@ -98,7 +98,7 @@ const pots: PotItem[] = [
     price: 1350,
     category: "All Pot",
     image:
-      "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&w=900&q=80",
+      "/images/creamy.png",
   },
   {
     name: "Copper Hanging Planter",
@@ -108,7 +108,7 @@ const pots: PotItem[] = [
     price: 1400,
     category: "Hanging",
     image:
-      "https://images.unsplash.com/photo-1459156212016-c812468e2115?auto=format&fit=crop&w=900&q=80",
+      "/images/hanging.png",
   },
 ];
 
