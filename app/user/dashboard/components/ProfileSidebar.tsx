@@ -43,13 +43,11 @@ export default function ProfileSidebar({ open, onClose }: ProfileSidebarProps) {
 
   return (
     <>
-      {/* Sidebar background blur */}
       <div
         onClick={onClose}
         className={`fixed inset-0 z-40 bg-black/30 backdrop-blur-sm transition-opacity duration-300`}
       />
 
-      {/* Sidebar */}
       <div className="fixed right-0 top-0 h-full w-[360px] bg-[#f8f7f3] z-50 shadow-xl p-5 flex flex-col transition-transform duration-300">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
