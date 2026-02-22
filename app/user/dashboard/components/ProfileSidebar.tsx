@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { clearAuthCookies } from "@/lib/cookie";
 import { useCurrentUser } from "./useCurrentUser";
@@ -12,10 +13,22 @@ interface ProfileSidebarProps {
 export default function ProfileSidebar({ open, onClose }: ProfileSidebarProps) {
   const router = useRouter();
   const user = useCurrentUser();
+  const [darkMode, setDarkMode] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return localStorage.getItem("hb_theme") === "dark";
+  });
   const displayName = user?.fullname || user?.fullName || user?.name || "Aarati";
   const displayEmail = user?.email || "aarati@example.com";
   const profileUrl = user?.profileUrl;
   const initial = displayName.charAt(0).toUpperCase();
+
+  const handleDarkModeToggle = () => {
+    const next = !darkMode;
+    setDarkMode(next);
+    const theme = next ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("hb_theme", theme);
+  };
 
   if (!open) return null;
 
@@ -88,6 +101,29 @@ export default function ProfileSidebar({ open, onClose }: ProfileSidebarProps) {
               <span className="text-gray-400">›</span>
             </div>
           ))}
+
+          <div className="bg-white p-3 rounded-xl shadow-sm flex justify-between items-center">
+            <span>Dark Mode</span>
+            <button
+              onClick={handleDarkModeToggle}
+              className={`relative inline-flex h-7 w-16 items-center rounded-full transition ${
+                darkMode ? "bg-[#2f5d3a]" : "bg-gray-300"
+              }`}
+              aria-label="Toggle dark mode"
+            >
+              <span
+                className={`inline-block h-6 w-6 transform rounded-full bg-white shadow transition ${
+                  darkMode ? "translate-x-9" : "translate-x-1"
+                }`}
+              />
+              <span className="absolute right-2 text-[10px] font-semibold text-white">
+                {darkMode ? "ON" : ""}
+              </span>
+              <span className="absolute left-2 text-[10px] font-semibold text-[#4b5563]">
+                {darkMode ? "" : "OFF"}
+              </span>
+            </button>
+          </div>
         </div>
 
         {/* Logout */}
