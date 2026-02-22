@@ -1,10 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
-// import ProfileModal from "../../profile/_components/ProfileModal";
-import { UpdateUserData } from "@/app/user/profile/schema";
 import { clearAuthCookies } from "@/lib/cookie";
+import { useCurrentUser } from "./useCurrentUser";
 
 interface ProfileSidebarProps {
   open: boolean;
@@ -13,20 +11,15 @@ interface ProfileSidebarProps {
 
 export default function ProfileSidebar({ open, onClose }: ProfileSidebarProps) {
   const router = useRouter();
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
-
-  const [user, setUser] = useState<UpdateUserData>({
-    fullname: "Aarati",
-    email: "aarati@example.com",
-    phoneNumber: "+977 9812345678",
-    address: "Kathmandu, Nepal",
-    profileUrl: undefined,
-  });
+  const user = useCurrentUser();
+  const displayName = user?.fullname || user?.fullName || user?.name || "Aarati";
+  const displayEmail = user?.email || "aarati@example.com";
+  const profileUrl = user?.profileUrl;
+  const initial = displayName.charAt(0).toUpperCase();
 
   if (!open) return null;
 
   const menuItems = [
-    // { label: "My Profile", action: () => setIsProfileOpen(true) },
     { label: "My Profile", action: () => router.push("/user/profile") },
     { label: "My Plants", path: "/user/plants" },
     { label: "Orders", path: "/orders" },
@@ -55,22 +48,23 @@ export default function ProfileSidebar({ open, onClose }: ProfileSidebarProps) {
           <button onClick={onClose} className="text-xl">✕</button>
         </div>
 
-        {/* Avatar + Camera */}
+        {/* Avatar */}
         <div className="flex items-center gap-4 mb-6">
-          <div className="relative">
-            <div className="w-16 h-16 rounded-full bg-[#7c8f7a] text-white flex items-center justify-center text-xl">
-              A
-            </div>
-
-            <label className="absolute bottom-0 right-0 bg-white p-1 rounded-full shadow cursor-pointer">
-              📷
-              <input type="file" hidden />
-            </label>
+          <div className="h-16 w-16 overflow-hidden rounded-full bg-[#7c8f7a] text-white flex items-center justify-center text-xl">
+            {profileUrl ? (
+              <img
+                src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/profile/${profileUrl}`}
+                alt={displayName}
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              initial
+            )}
           </div>
 
           <div>
-            <h3 className="font-semibold">{user.fullname}</h3>
-            <p className="text-sm text-gray-500">{user.email}</p>
+            <h3 className="font-semibold">{displayName}</h3>
+            <p className="text-sm text-gray-500">{displayEmail}</p>
           </div>
         </div>
 
@@ -85,6 +79,7 @@ export default function ProfileSidebar({ open, onClose }: ProfileSidebarProps) {
                   onClose();
                 } else if (item.action) {
                   item.action();
+                  onClose();
                 }
               }}
               className="bg-white p-3 rounded-xl shadow-sm flex justify-between items-center cursor-pointer hover:bg-green-50 transition"

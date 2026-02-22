@@ -1,5 +1,7 @@
 "use client";
 
+import { useCurrentUser } from "./useCurrentUser";
+
 interface HeaderProps {
   onProfileClick?: () => void;
   onNotificationClick?: () => void;
@@ -13,6 +15,11 @@ export default function Header({
   onCartClick,
   cartCount = 0,
 }: HeaderProps) {
+  const user = useCurrentUser();
+  const displayName = user?.fullname || user?.fullName || user?.name || "Aarati";
+  const profileUrl = user?.profileUrl;
+  const initial = displayName.charAt(0).toUpperCase();
+
   return (
     <>
       <div className="flex justify-between items-center px-10 py-4 bg-[#f9f7f2]">
@@ -52,15 +59,23 @@ export default function Header({
 
           <div
             onClick={onProfileClick}
-            className="w-10 h-10 rounded-full bg-[#7c8f7a] text-white flex items-center justify-center cursor-pointer"
+            className="h-10 w-10 cursor-pointer overflow-hidden rounded-full bg-[#7c8f7a] text-white flex items-center justify-center"
           >
-            A
+            {profileUrl ? (
+              <img
+                src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/profile/${profileUrl}`}
+                alt={displayName}
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              initial
+            )}
           </div>
         </div>
       </div>
 
       <div className="bg-[#c8d9c5] px-10 py-4">
-        <h2 className="text-lg font-semibold">Welcome, Aarati</h2>
+        <h2 className="text-lg font-semibold">Welcome, {displayName}</h2>
         <p className="text-sm text-gray-700">
           Let&apos;s make your garden beautiful today
         </p>

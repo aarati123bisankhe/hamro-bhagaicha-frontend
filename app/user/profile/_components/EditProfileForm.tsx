@@ -1,37 +1,50 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { updateUserSchema, UpdateUserData } from "@/app/user/profile/schema";
 import { handleUpdateProfile } from "@/lib/actions/auth_action";
 
+type ProfileUser = {
+  fullname?: string;
+  fullName?: string;
+  name?: string;
+  email?: string;
+  phoneNumber?: string;
+  phone?: string;
+  address?: string;
+  role?: string;
+  profileUrl?: string;
+};
+
 export default function EditProfileForm({
   user,
   onCancel,
+  onSaved,
 }: {
-  user: any;
+  user: ProfileUser;
   onCancel: () => void;
+  onSaved: (updatedUser: ProfileUser) => void;
 }) {
+  const router = useRouter();
   const backendUrl = process.env.NEXT_PUBLIC_API_URL;
+
   const [form, setForm] = useState<UpdateUserData>({
-  fullname: user.fullName ?? "",
-  email: user.email ?? "",
-  phoneNumber: user.phone ?? "",
-  address: user.address ?? "",
-  profileUrl: undefined,
-});
-
-
+    fullname: user.fullname ?? user.fullName ?? user.name ?? "",
+    email: user.email ?? "",
+    phoneNumber: user.phoneNumber ?? user.phone ?? "",
+    address: user.address ?? "",
+    profileUrl: undefined,
+  });
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   const profilePreview = form.profileUrl
-    ? form.profileUrl instanceof File
-      ? URL.createObjectURL(form.profileUrl)
-      : `${backendUrl}/uploads/profile/${form.profileUrl}`
+    ? URL.createObjectURL(form.profileUrl)
     : user.profileUrl
     ? `${backendUrl}/uploads/profile/${user.profileUrl}`
-    : "/placeholder-profile.png";
+    : "";
 
   const onSubmit = async () => {
     setError(null);
@@ -46,141 +59,148 @@ export default function EditProfileForm({
 
     try {
       const formData = new FormData();
-      // formData.append("fullname", parsed.data.fullname);
-      // formData.append("email", parsed.data.email);
-      // formData.append("phoneNumber", parsed.data.phoneNumber);
-      // formData.append("address", parsed.data.address);
-      // formData.append("role", user.role);
-      formData.append("fullname", user.fullname);
-      formData.append("email", user.email);
-      formData.append("phoneNumber", user.phoneNumber);
-      formData.append("address", user.address);
-      formData.append("role", user.role);
-
-      // if (parsed.data.profileUrl instanceof File) {
-      //   formData.append("profileUrl", parsed.data.profileUrl);
-      // }
-      if(parsed.data.profileUrl) formData.append("profileUrl",parsed.data.profileUrl);
+      formData.append("fullname", parsed.data.fullname);
+      formData.append("email", parsed.data.email);
+      formData.append("phoneNumber", parsed.data.phoneNumber);
+      formData.append("address", parsed.data.address);
+      formData.append("role", user.role ?? "user");
+      if (parsed.data.profileUrl) {
+        formData.append("profileUrl", parsed.data.profileUrl);
+      }
 
       const res = await handleUpdateProfile(formData);
       if (!res.success) throw new Error(res.message || "Update failed");
 
+      const updatedUser = (res.data as ProfileUser) ?? {
+        ...user,
+        fullname: parsed.data.fullname,
+        email: parsed.data.email,
+        phoneNumber: parsed.data.phoneNumber,
+        address: parsed.data.address,
+      };
+
+      onSaved(updatedUser);
+      window.dispatchEvent(new Event("user-data-updated"));
+      router.refresh();
       toast.success("Profile updated successfully");
-      onCancel();
-    } catch (err: any) {
-      toast.error(err.message || "Update failed");
-      setError(err.message);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Update failed";
+      toast.error(message);
+      setError(message);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/100 text-black">
-      <div className="bg-white rounded-2xl p-6 w-full max-w-lg relative space-y-4 text-black">
-        <button
-          onClick={onCancel}
-          className="absolute top-4 right-4 text-black hover:text-gray-700 text-xl font-bold"
-        >
-          ✕
-        </button>
+    <div className="rounded-xl bg-[#eef4e9] p-6">
+      <div className="mb-6 flex items-center justify-between">
+        <h2 className="text-xl font-semibold text-[#1d4125]">Edit Profile</h2>
+      </div>
 
-        <h2 className="text-xl font-semibold text-black">Edit Profile</h2>
-
-        <input
-          // label="FullName"
-          placeholder= 'FullName'
-          value={form.fullname}
-          onChange={(e: any) =>
-            setForm({ ...form, fullname: e.target.value })
-          }
-        />
-
-        <input
-          // label="Email"
-          placeholder="Email"
-          value={form.email}
-          onChange={(e: any) =>
-            setForm({ ...form, email: e.target.value })
-          }
-        />
-
-        <input
-          // label="PhoneNumber"
-          placeholder='PhoneNumber'
-          value={form.phoneNumber}
-          onChange={(e: any) =>
-            setForm({ ...form, phoneNumber: e.target.value })
-          }
-        />
-
-        <input
-          // label="Address"
-          placeholder="Address"
-          value={form.address}
-          onChange={(e: any) =>
-            setForm({ ...form, address: e.target.value })
-          }
-        />
-
-        <div className="flex items-start gap-6">
-          <div className="relative group">
-            <img
-              src={profilePreview}
-              alt="Profile Preview"
-              className="w-32 h-32 object-cover rounded-full border-4 border-white shadow"
-            />
+      <div className="grid gap-5 lg:grid-cols-[220px_1fr]">
+        <div className="space-y-3">
+          <div className="h-40 w-40 overflow-hidden rounded-full border-4 border-white bg-[#d9e7d4] shadow">
+            {profilePreview ? (
+              <img
+                src={profilePreview}
+                alt="Profile Preview"
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center text-4xl font-semibold text-[#2f5d3a]">
+                {(form.fullname?.charAt(0) || "U").toUpperCase()}
+              </div>
+            )}
+          </div>
+          <label className="block cursor-pointer rounded-lg bg-white px-4 py-2 text-center text-sm font-medium text-[#2f5d3a] shadow-sm">
+            Upload Photo
             <input
               type="file"
               accept="image/*"
-              onChange={(e) =>
-                setForm({ ...form, profileUrl: e.target.files?.[0] })
+              onChange={(event) =>
+                setForm({ ...form, profileUrl: event.target.files?.[0] })
               }
-              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer rounded-full"
+              className="hidden"
             />
-            <div className="absolute inset-0 flex items-center justify-center bg-black/30 text-white text-xs rounded-full opacity-0 group-hover:opacity-100 transition pointer-events-none text-center px-2">
-              Tap the profile image to change
-            </div>
-          </div>
+          </label>
         </div>
 
-        {error && <p className="text-red-500 text-sm">{error}</p>}
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field label="Full Name">
+            <input
+              value={form.fullname}
+              onChange={(event) =>
+                setForm({ ...form, fullname: event.target.value })
+              }
+              className="w-full text-black rounded-lg border border-[#c8d9c5] bg-white px-3 py-2 outline-none focus:border-[#6f9b76]"
+            />
+          </Field>
 
-        <div className="flex gap-3 mt-4">
-          <button
-            onClick={onSubmit}
-            disabled={loading}
-            className="flex-1 bg-green-600 text-black py-2 rounded hover:bg-green-700 transition"
-          >
-            {loading ? "Saving..." : "Save"}
-          </button>
+          <Field label="Email">
+            <input
+              value={form.email}
+              onChange={(event) =>
+                setForm({ ...form, email: event.target.value })
+              }
+              className="w-full text-black rounded-lg border border-[#c8d9c5] bg-white px-3 py-2 outline-none focus:border-[#6f9b76]"
+            />
+          </Field>
 
-          <button
-            onClick={onCancel}
-            className="flex-1 bg-gray-200 text-black py-2 rounded hover:bg-gray-300 transition"
-          >
-            Cancel
-          </button>
+          <Field label="Phone Number">
+            <input
+              value={form.phoneNumber}
+              onChange={(event) =>
+                setForm({ ...form, phoneNumber: event.target.value })
+              }
+              className="w-full text-black rounded-lg border border-[#c8d9c5] bg-white px-3 py-2 outline-none focus:border-[#6f9b76]"
+            />
+          </Field>
+
+          <Field label="Address">
+            <input
+              value={form.address}
+              onChange={(event) =>
+                setForm({ ...form, address: event.target.value })
+              }
+              className="w-full text-black rounded-lg border border-[#c8d9c5] bg-white px-3 py-2 outline-none focus:border-[#6f9b76]"
+            />
+          </Field>
         </div>
+      </div>
+
+      {error && <p className="mt-4 text-sm text-red-600">{error}</p>}
+
+      <div className="mt-6 flex gap-3">
+        <button
+          onClick={onSubmit}
+          disabled={loading}
+          className="rounded-lg bg-[#2f5d3a] px-5 py-2.5 font-medium text-white transition hover:bg-[#264a2e] disabled:cursor-not-allowed disabled:opacity-70"
+        >
+          {loading ? "Saving..." : "Save Changes"}
+        </button>
+        <button
+          onClick={onCancel}
+          className="rounded-lg bg-white px-5 py-2.5 font-medium text-[#2f5d3a] shadow-sm transition hover:bg-[#f2f7ef]"
+        >
+          Cancel
+        </button>
       </div>
     </div>
   );
 }
 
-// function Input({ label, ...props }: FormData) {
-// function Input({ label, ...props }: { label: string; [key: string]: any }) {
-//   return (
-//     <div>
-//       <label className="text-sm text-black">{label}</label>
-//       <input
-//         {...props}
-//         className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 text-black"
-//       />
-//     </div>
-//   );
-// }
-
-
-
-
-
+function Field({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <label className="space-y-1.5">
+      <span className="text-sm font-medium text-[#45634b]">{label}</span>
+      {children}
+    </label>
+  );
+}
