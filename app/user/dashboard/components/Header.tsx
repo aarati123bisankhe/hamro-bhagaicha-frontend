@@ -48,9 +48,13 @@
 
 interface HeaderProps {
   onProfileClick?: () => void;
+  onNotificationClick?: () => void;
 }
 
-export default function Header({ onProfileClick }: HeaderProps) {
+export default function Header({
+  onProfileClick,
+  onNotificationClick,
+}: HeaderProps) {
   return (
     <>
       <div className="flex justify-between items-center px-10 py-4 bg-[#f9f7f2]">
@@ -71,7 +75,10 @@ export default function Header({ onProfileClick }: HeaderProps) {
 
         {/* Icons */}
         <div className="flex items-center gap-4">
-          <div className="w-10 h-10 rounded-full bg-[#c8d9c5] shadow flex items-center justify-center">
+          <div
+            onClick={onNotificationClick}
+            className="w-10 h-10 rounded-full bg-[#c8d9c5] shadow flex items-center justify-center cursor-pointer"
+          >
             🔔
           </div>
 

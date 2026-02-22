@@ -28,7 +28,7 @@ const combos: ComboItem[] = [
     price: 5200,
     oldPrice: 6500,
     image:
-      "https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&w=1000&q=80",
+      "/images/combo.png",
   },
   {
     name: "Desk Trio Delight",
@@ -39,7 +39,7 @@ const combos: ComboItem[] = [
     price: 2800,
     oldPrice: 3500,
     image:
-      "https://images.unsplash.com/photo-1463320726281-696a485928c7?auto=format&fit=crop&w=1000&q=80",
+      "/images/combo1.png",
   },
   {
     name: "Succulent Garden Set",
@@ -50,7 +50,7 @@ const combos: ComboItem[] = [
     price: 2400,
     oldPrice: 3000,
     image:
-      "https://images.unsplash.com/photo-1459156212016-c812468e2115?auto=format&fit=crop&w=1000&q=80",
+      "/images/combo2.png",
   },
   {
     name: "Air Purifier Trio",
@@ -61,7 +61,7 @@ const combos: ComboItem[] = [
     price: 4200,
     oldPrice: 5200,
     image:
-      "https://images.unsplash.com/photo-1534710961216-75c88202f43e?auto=format&fit=crop&w=1000&q=80",
+      "/images/combo3.png",
   },
   {
     name: "Gift Box Special",
@@ -72,7 +72,7 @@ const combos: ComboItem[] = [
     price: 3500,
     oldPrice: 4300,
     image:
-      "https://images.unsplash.com/photo-1470163395405-d2b80e7450ed?auto=format&fit=crop&w=1000&q=80",
+      "/images/combo4.png",
   },
   {
     name: "Premium Monstera Combo",
@@ -83,7 +83,7 @@ const combos: ComboItem[] = [
     price: 5500,
     oldPrice: 7000,
     image:
-      "https://images.unsplash.com/photo-1593691509543-c55fb32f5ea3?auto=format&fit=crop&w=1000&q=80",
+      "/images/combo5.png",
   },
   {
     name: "Colorful Blooms Bundle",
@@ -94,7 +94,7 @@ const combos: ComboItem[] = [
     price: 3600,
     oldPrice: 4500,
     image:
-      "https://images.unsplash.com/photo-1525310072745-f49212b5ac6d?auto=format&fit=crop&w=1000&q=80",
+      "/images/combo6.png",
   },
   {
     name: "Kitchen Herb Garden",
@@ -105,7 +105,7 @@ const combos: ComboItem[] = [
     price: 2600,
     oldPrice: 3200,
     image:
-      "https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?auto=format&fit=crop&w=1000&q=80",
+      "/images/combo7.png",
   },
   {
     name: "Tropical Paradise Set",
@@ -116,7 +116,7 @@ const combos: ComboItem[] = [
     price: 7500,
     oldPrice: 8900,
     image:
-      "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1000&q=80",
+      "/images/combo8.png",
   },
 ];
 
