@@ -17,7 +17,6 @@ export default async function ProfilePage() {
       <div className="relative px-6">
         <ProfileAvatar profileUrl={user.profileUrl} />
         <ProfileClient user={user} />
-        {/* <ProfileStats user={user} /> */}
        
       </div>
     </div>

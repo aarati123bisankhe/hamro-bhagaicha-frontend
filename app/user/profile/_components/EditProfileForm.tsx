@@ -13,14 +13,6 @@ export default function EditProfileForm({
   onCancel: () => void;
 }) {
   const backendUrl = process.env.NEXT_PUBLIC_API_URL;
-
-  // const [form, setForm] = useState<UpdateUserData>({
-  //   fullname: user.fullName,
-  //   email: user.email,
-  //   phoneNumber: user.phone,
-  //   address: user.address,
-  //   profileUrl: undefined,
-  // });
   const [form, setForm] = useState<UpdateUserData>({
   fullname: user.fullName ?? "",
   email: user.email ?? "",
