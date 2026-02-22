@@ -47,7 +47,7 @@
 "use client";
 
 interface HeaderProps {
-  onProfileClick: () => void;
+  onProfileClick?: () => void;
 }
 
 export default function Header({ onProfileClick }: HeaderProps) {

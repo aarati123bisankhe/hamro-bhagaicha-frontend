@@ -1,0 +1,220 @@
+"use client";
+
+import { ShoppingCart, Star } from "lucide-react";
+import Link from "next/link";
+import { useMemo, useState } from "react";
+import Footer from "../components/Footer";
+import Header from "../components/Header";
+import ProfileSidebar from "../components/ProfileSidebar";
+
+type PlantCategory = "All Plant" | "Indoor Plant" | "Outdoor Plant";
+
+type PlantItem = {
+  name: string;
+  description: string;
+  rating: number;
+  reviews: number;
+  price: number;
+  category: Exclude<PlantCategory, "All Plant">;
+  image: string;
+};
+
+const plants: PlantItem[] = [
+  {
+    name: "Monstera Deliciosa",
+    description: "Large, glossy leaves with natural splits.",
+    rating: 4.8,
+    reviews: 84,
+    price: 1200,
+    category: "Indoor Plant",
+    image:
+      "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    name: "Snake Plant",
+    description: "Low maintenance, air purifying champion.",
+    rating: 4.9,
+    reviews: 90,
+    price: 500,
+    category: "Indoor Plant",
+    image:
+      "https://images.unsplash.com/photo-1593691509543-c55fb32f5ea3?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    name: "Fiddle Leaf Fig",
+    description: "Statement plant with violin shaped leaves.",
+    rating: 4.7,
+    reviews: 204,
+    price: 3500,
+    category: "Indoor Plant",
+    image:
+      "https://images.unsplash.com/photo-1598880940942-e9f57ab8e2c5?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    name: "Jade Plant",
+    description: "Lucky plant with thick and glossy leaves.",
+    rating: 4.8,
+    reviews: 566,
+    price: 1500,
+    category: "Indoor Plant",
+    image:
+      "https://images.unsplash.com/photo-1459156212016-c812468e2115?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    name: "Aloe Vera Plant",
+    description: "Medicinal wonder, easy to care.",
+    rating: 4.9,
+    reviews: 39,
+    price: 900,
+    category: "Outdoor Plant",
+    image:
+      "https://images.unsplash.com/photo-1598520106830-8c45c2035460?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    name: "Peace Lily",
+    description: "White blooms and elegant dark foliage.",
+    rating: 4.9,
+    reviews: 26,
+    price: 1800,
+    category: "Indoor Plant",
+    image:
+      "https://images.unsplash.com/photo-1530023367847-a683933f4172?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    name: "Hibiscus",
+    description: "Tropical beauty with vibrant blooms.",
+    rating: 4.8,
+    reviews: 134,
+    price: 2200,
+    category: "Outdoor Plant",
+    image:
+      "https://images.unsplash.com/photo-1599070221191-dbbcd7f58f71?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    name: "Rubber Plant",
+    description: "Bold, glossy leaves in deep green.",
+    rating: 4.8,
+    reviews: 82,
+    price: 2800,
+    category: "Indoor Plant",
+    image:
+      "https://images.unsplash.com/photo-1602923668104-c4dfd2b9818f?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    name: "Bird of Paradise",
+    description: "Dramatic tropical statement plant.",
+    rating: 4.8,
+    reviews: 64,
+    price: 2400,
+    category: "Outdoor Plant",
+    image:
+      "https://images.unsplash.com/photo-1616091216791-0f7d79f82d8e?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    name: "ZZ Plant",
+    description: "Nearly indestructible, perfect for office.",
+    rating: 4.8,
+    reviews: 74,
+    price: 1600,
+    category: "Indoor Plant",
+    image:
+      "https://images.unsplash.com/photo-1632207691143-643e2db91a6f?auto=format&fit=crop&w=900&q=80",
+  },
+];
+
+export default function PlantPage() {
+  const [activeTab, setActiveTab] = useState<PlantCategory>("All Plant");
+  const [profileOpen, setProfileOpen] = useState(false);
+
+  const filteredPlants = useMemo(() => {
+    if (activeTab === "All Plant") return plants;
+    return plants.filter((plant) => plant.category === activeTab);
+  }, [activeTab]);
+
+  return (
+    <>
+      <Header onProfileClick={() => setProfileOpen(true)} />
+
+      <main className="px-6 py-8 md:px-10">
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-7 flex items-center gap-2 text-sm text-[#5f5f5f]">
+            <Link href="/user/dashboard" className="hover:text-[#1f4f2a]">
+              Home
+            </Link>
+            <span>&gt;</span>
+            <span className="font-semibold text-[#1f4f2a]">Plant</span>
+          </div>
+
+          <h2 className="text-3xl font-semibold text-[#1f4f2a]">
+            Our Plant Collection
+          </h2>
+          <p className="mt-3 text-xl font-semibold text-[#1f1f1f]">
+            Discover your perfect green companion from our curated selection
+          </p>
+
+          <div className="mt-8 flex flex-wrap gap-4">
+            {(["All Plant", "Indoor Plant", "Outdoor Plant"] as PlantCategory[]).map(
+              (tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`rounded-full px-7 py-3 text-base font-medium shadow-sm transition ${
+                    activeTab === tab
+                      ? "bg-[#9fc8a5] text-[#264a2e]"
+                      : "bg-[#dbe4d4] text-[#4e5e51] hover:bg-[#cfddc6]"
+                  }`}
+                >
+                  {tab}
+                </button>
+              )
+            )}
+          </div>
+
+          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
+            {filteredPlants.map((plant) => (
+              <article
+                key={plant.name}
+                className="overflow-hidden rounded-3xl border border-[#d5ddce] bg-[#dce7d7] shadow-sm"
+              >
+                <img
+                  src={plant.image}
+                  alt={plant.name}
+                  className="h-56 w-full bg-[#edf2e9] object-cover"
+                />
+
+                <div className="space-y-2 px-4 py-3 text-[#143519]">
+                  <h3 className="text-base font-semibold">{plant.name}</h3>
+                  <p className="text-xs text-[#35543c]">{plant.description}</p>
+
+                  <div className="flex items-center gap-1 text-xs text-[#244a2d]">
+                    <Star className="h-3.5 w-3.5 fill-[#1f6a2f] text-[#1f6a2f]" />
+                    <span>{plant.rating}</span>
+                    <span className="text-[#45634b]">
+                      ({plant.reviews} Reviews)
+                    </span>
+                  </div>
+
+                  <div className="mt-3 flex items-end justify-between border-t border-[#c6d1bf] pt-2">
+                    <div>
+                      <p className="text-xs text-[#56735d]">Price</p>
+                      <p className="text-lg font-bold text-[#1d4e2a]">
+                        NPR {plant.price}
+                      </p>
+                    </div>
+
+                    <button className="rounded-full bg-[#8fc48f] p-2 text-[#1d4e2a] transition hover:bg-[#7fb77f]">
+                      <ShoppingCart className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </main>
+
+      <Footer />
+      <ProfileSidebar open={profileOpen} onClose={() => setProfileOpen(false)} />
+    </>
+  );
+}

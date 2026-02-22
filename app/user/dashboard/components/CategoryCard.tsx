@@ -1,9 +1,12 @@
+import Link from "next/link";
+
 interface Props {
   title: string;
   subtitle: string;
   count: string;
   image: string;
   sideImage: string;
+  href?: string;
 }
 
 export default function CategoryCard({
@@ -12,8 +15,9 @@ export default function CategoryCard({
   count,
   image,
   sideImage,
+  href,
 }: Props) {
-  return (
+  const card = (
     <div className="bg-[#e7efdf] rounded-2xl shadow overflow-hidden">
       <img src={image} alt={title} className="h-44 w-full object-cover" />
 
@@ -39,6 +43,13 @@ export default function CategoryCard({
       </div>
     </div>
   );
-}
 
+  if (!href) return card;
+
+  return (
+    <Link href={href} className="block transition hover:scale-[1.01]">
+      {card}
+    </Link>
+  );
+}
 

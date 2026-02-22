@@ -14,7 +14,7 @@ export default function CategoriesSection() {
           count="150+ varieties"
           image="/images/plantsimage1.jpg"
           sideImage="/images/cart1.png"
-          
+          href="/user/dashboard/plant"
         />
 
         <CategoryCard
@@ -23,6 +23,7 @@ export default function CategoriesSection() {
           count="80+ designs"
           image="/images/plotsimage.jpg"
           sideImage="/images/card2.png"
+          href="/user/dashboard/pot"
         />
 
         <CategoryCard
@@ -31,6 +32,7 @@ export default function CategoriesSection() {
           count="Plant + Pot set"
           image="/images/combosimage.jpg"
           sideImage="/images/card3.png"
+          href="/user/dashboard/combo"
         />
       </div>
     </section>
