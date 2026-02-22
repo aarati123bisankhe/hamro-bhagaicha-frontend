@@ -28,7 +28,7 @@ const plants: PlantItem[] = [
     price: 1200,
     category: "Indoor Plant",
     image:
-      "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=900&q=80",
+      "/images/monsteradeliciosa.webp",
   },
   {
     name: "Snake Plant",
@@ -38,7 +38,7 @@ const plants: PlantItem[] = [
     price: 500,
     category: "Indoor Plant",
     image:
-      "https://images.unsplash.com/photo-1593691509543-c55fb32f5ea3?auto=format&fit=crop&w=900&q=80",
+      "/images/snakeplant1.webp",
   },
   {
     name: "Fiddle Leaf Fig",
@@ -48,7 +48,7 @@ const plants: PlantItem[] = [
     price: 3500,
     category: "Indoor Plant",
     image:
-      "https://images.unsplash.com/photo-1598880940942-e9f57ab8e2c5?auto=format&fit=crop&w=900&q=80",
+      "/images/Fiddle Leaf Fig.webp",
   },
   {
     name: "Jade Plant",
@@ -58,7 +58,7 @@ const plants: PlantItem[] = [
     price: 1500,
     category: "Indoor Plant",
     image:
-      "https://images.unsplash.com/photo-1459156212016-c812468e2115?auto=format&fit=crop&w=900&q=80",
+      "/images/Jade Plant.webp",
   },
   {
     name: "Aloe Vera Plant",
@@ -68,7 +68,7 @@ const plants: PlantItem[] = [
     price: 900,
     category: "Outdoor Plant",
     image:
-      "https://images.unsplash.com/photo-1598520106830-8c45c2035460?auto=format&fit=crop&w=900&q=80",
+      "/images/Aloe Vera Plant.webp",
   },
   {
     name: "Peace Lily",
@@ -78,7 +78,7 @@ const plants: PlantItem[] = [
     price: 1800,
     category: "Indoor Plant",
     image:
-      "https://images.unsplash.com/photo-1530023367847-a683933f4172?auto=format&fit=crop&w=900&q=80",
+      "/images/peacelily.png",
   },
   {
     name: "Hibiscus",
@@ -88,7 +88,7 @@ const plants: PlantItem[] = [
     price: 2200,
     category: "Outdoor Plant",
     image:
-      "https://images.unsplash.com/photo-1599070221191-dbbcd7f58f71?auto=format&fit=crop&w=900&q=80",
+      "/images/habiscus.png",
   },
   {
     name: "Rubber Plant",
@@ -98,7 +98,7 @@ const plants: PlantItem[] = [
     price: 2800,
     category: "Indoor Plant",
     image:
-      "https://images.unsplash.com/photo-1602923668104-c4dfd2b9818f?auto=format&fit=crop&w=900&q=80",
+      "/images/Rubber Plant.png",
   },
   {
     name: "Bird of Paradise",
@@ -108,7 +108,7 @@ const plants: PlantItem[] = [
     price: 2400,
     category: "Outdoor Plant",
     image:
-      "https://images.unsplash.com/photo-1616091216791-0f7d79f82d8e?auto=format&fit=crop&w=900&q=80",
+      "/images/birdofpradise.png",
   },
   {
     name: "ZZ Plant",
@@ -118,7 +118,7 @@ const plants: PlantItem[] = [
     price: 1600,
     category: "Indoor Plant",
     image:
-      "https://images.unsplash.com/photo-1632207691143-643e2db91a6f?auto=format&fit=crop&w=900&q=80",
+      "/images/zz.png",
   },
 ];
 
@@ -148,7 +148,7 @@ export default function PlantPage() {
           <h2 className="text-3xl font-semibold text-[#1f4f2a]">
             Our Plant Collection
           </h2>
-          <p className="mt-3 text-xl font-semibold text-[#1f1f1f]">
+          <p className="mt-5 text-xl font-semibold text-[#1f1f1f]">
             Discover your perfect green companion from our curated selection
           </p>
 

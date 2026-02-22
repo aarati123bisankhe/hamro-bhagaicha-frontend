@@ -28,7 +28,7 @@ const pots: PotItem[] = [
     price: 500,
     category: "All Pot",
     image:
-      "https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&w=900&q=80",
+      "/images/ceramic.png",
   },
   {
     name: "Rustic Terracotta Classic",
