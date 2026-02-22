@@ -2,10 +2,15 @@
 
 import { ShoppingCart, Star } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import NotificationSidebar from "../components/NotificationSidebar";
 import ProfileSidebar from "../components/ProfileSidebar";
+import CartSidebar from "../components/CartSidebar";
+import { useCart } from "../components/useCart";
+import SearchBar from "../components/SearchBar";
 
 type ComboItem = {
   name: string;
@@ -121,11 +126,34 @@ const combos: ComboItem[] = [
 ];
 
 export default function ComboPage() {
+  const searchParams = useSearchParams();
   const [profileOpen, setProfileOpen] = useState(false);
+  const [notificationOpen, setNotificationOpen] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState(
+    () => searchParams.get("search") ?? ""
+  );
+  const { items, itemCount, subtotal, increaseQty, decreaseQty, removeItem } =
+    useCart();
+
+  const filteredCombos = useMemo(() => {
+    const normalizedQuery = searchQuery.trim().toLowerCase();
+    if (!normalizedQuery) return combos;
+
+    return combos.filter((combo) => {
+      const haystack = `${combo.name} ${combo.description} ${combo.details}`.toLowerCase();
+      return haystack.includes(normalizedQuery);
+    });
+  }, [searchQuery]);
 
   return (
     <>
-      <Header onProfileClick={() => setProfileOpen(true)} />
+      <Header
+        onProfileClick={() => setProfileOpen(true)}
+        onNotificationClick={() => setNotificationOpen(true)}
+        onCartClick={() => setCartOpen(true)}
+        cartCount={itemCount}
+      />
 
       <main className="px-6 py-8 md:px-10">
         <div className="mx-auto max-w-7xl">
@@ -143,6 +171,13 @@ export default function ComboPage() {
           <p className="mt-3 text-xl font-semibold text-[#1f1f1f]">
             Curated bundle for every need and occasion
           </p>
+          <div className="mt-6">
+            <SearchBar
+              value={searchQuery}
+              onChange={setSearchQuery}
+              placeholder="Search combo bundles..."
+            />
+          </div>
 
           <div className="mt-8">
             <button className="rounded-full bg-[#9fc8a5] px-7 py-3 text-base font-medium text-[#264a2e] shadow-sm">
@@ -151,7 +186,7 @@ export default function ComboPage() {
           </div>
 
           <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
-            {combos.map((combo) => (
+            {filteredCombos.map((combo) => (
               <article
                 key={combo.name}
                 className="overflow-hidden rounded-3xl border border-[#d5ddce] bg-[#dce7d7] shadow-sm"
@@ -204,6 +239,19 @@ export default function ComboPage() {
 
       <Footer />
       <ProfileSidebar open={profileOpen} onClose={() => setProfileOpen(false)} />
+      <NotificationSidebar
+        open={notificationOpen}
+        onClose={() => setNotificationOpen(false)}
+      />
+      <CartSidebar
+        open={cartOpen}
+        onClose={() => setCartOpen(false)}
+        items={items}
+        subtotal={subtotal}
+        onIncrease={increaseQty}
+        onDecrease={decreaseQty}
+        onRemove={removeItem}
+      />
     </>
   );
 }

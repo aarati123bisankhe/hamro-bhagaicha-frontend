@@ -49,11 +49,15 @@
 interface HeaderProps {
   onProfileClick?: () => void;
   onNotificationClick?: () => void;
+  onCartClick?: () => void;
+  cartCount?: number;
 }
 
 export default function Header({
   onProfileClick,
   onNotificationClick,
+  onCartClick,
+  cartCount = 0,
 }: HeaderProps) {
   return (
     <>
@@ -82,9 +86,17 @@ export default function Header({
             🔔
           </div>
 
-          <div className="w-10 h-10 rounded-full bg-[#c8d9c5] shadow flex items-center justify-center">
+          <button
+            onClick={onCartClick}
+            className="relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-[#c8d9c5] shadow"
+          >
             🛒
-          </div>
+            {cartCount > 0 && (
+              <span className="absolute -right-1 -top-1 rounded-full bg-[#2f5d3a] px-1.5 text-[10px] font-semibold text-white">
+                {cartCount}
+              </span>
+            )}
+          </button>
 
           {/* Profile Avatar */}
           <div
@@ -100,7 +112,7 @@ export default function Header({
       <div className="bg-[#c8d9c5] px-10 py-4">
         <h2 className="text-lg font-semibold">Welcome, Aarati</h2>
         <p className="text-sm text-gray-700">
-          Let's make your garden beautiful today
+          Let&apos;s make your garden beautiful today
         </p>
       </div>
     </>

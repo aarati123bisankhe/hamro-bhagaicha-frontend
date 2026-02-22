@@ -3,9 +3,14 @@
 import { ShoppingCart, Star } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import NotificationSidebar from "../components/NotificationSidebar";
 import ProfileSidebar from "../components/ProfileSidebar";
+import CartSidebar from "../components/CartSidebar";
+import { useCart } from "../components/useCart";
+import SearchBar from "../components/SearchBar";
 
 type PotCategory = "All Pot" | "Hanging";
 
@@ -113,17 +118,40 @@ const pots: PotItem[] = [
 ];
 
 export default function PotPage() {
+  const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState<PotCategory>("All Pot");
   const [profileOpen, setProfileOpen] = useState(false);
+  const [notificationOpen, setNotificationOpen] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState(
+    () => searchParams.get("search") ?? ""
+  );
+  const { items, itemCount, subtotal, increaseQty, decreaseQty, removeItem } =
+    useCart();
 
   const filteredPots = useMemo(() => {
-    if (activeTab === "All Pot") return pots;
-    return pots.filter((pot) => pot.category === activeTab);
-  }, [activeTab]);
+    const tabFiltered =
+      activeTab === "All Pot"
+        ? pots
+        : pots.filter((pot) => pot.category === activeTab);
+
+    const normalizedQuery = searchQuery.trim().toLowerCase();
+    if (!normalizedQuery) return tabFiltered;
+
+    return tabFiltered.filter((pot) => {
+      const haystack = `${pot.name} ${pot.description} ${pot.category}`.toLowerCase();
+      return haystack.includes(normalizedQuery);
+    });
+  }, [activeTab, searchQuery]);
 
   return (
     <>
-      <Header onProfileClick={() => setProfileOpen(true)} />
+      <Header
+        onProfileClick={() => setProfileOpen(true)}
+        onNotificationClick={() => setNotificationOpen(true)}
+        onCartClick={() => setCartOpen(true)}
+        cartCount={itemCount}
+      />
 
       <main className="px-6 py-8 md:px-10">
         <div className="mx-auto max-w-7xl">
@@ -141,6 +169,13 @@ export default function PotPage() {
           <p className="mt-3 text-xl font-semibold text-[#1f1f1f]">
             Find the perfect home for your green friends
           </p>
+          <div className="mt-6">
+            <SearchBar
+              value={searchQuery}
+              onChange={setSearchQuery}
+              placeholder="Search pots by name or style..."
+            />
+          </div>
 
           <div className="mt-8 flex flex-wrap gap-4">
             {(["All Pot", "Hanging"] as PotCategory[]).map((tab) => (
@@ -201,6 +236,19 @@ export default function PotPage() {
 
       <Footer />
       <ProfileSidebar open={profileOpen} onClose={() => setProfileOpen(false)} />
+      <NotificationSidebar
+        open={notificationOpen}
+        onClose={() => setNotificationOpen(false)}
+      />
+      <CartSidebar
+        open={cartOpen}
+        onClose={() => setCartOpen(false)}
+        items={items}
+        subtotal={subtotal}
+        onIncrease={increaseQty}
+        onDecrease={decreaseQty}
+        onRemove={removeItem}
+      />
     </>
   );
 }

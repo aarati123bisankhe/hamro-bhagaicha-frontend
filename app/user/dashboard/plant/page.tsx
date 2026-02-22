@@ -3,9 +3,14 @@
 import { ShoppingCart, Star } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import NotificationSidebar from "../components/NotificationSidebar";
 import ProfileSidebar from "../components/ProfileSidebar";
+import CartSidebar from "../components/CartSidebar";
+import { useCart } from "../components/useCart";
+import SearchBar from "../components/SearchBar";
 
 type PlantCategory = "All Plant" | "Indoor Plant" | "Outdoor Plant";
 
@@ -123,17 +128,47 @@ const plants: PlantItem[] = [
 ];
 
 export default function PlantPage() {
+  const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState<PlantCategory>("All Plant");
   const [profileOpen, setProfileOpen] = useState(false);
+  const [notificationOpen, setNotificationOpen] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState(
+    () => searchParams.get("search") ?? ""
+  );
+  const {
+    items,
+    itemCount,
+    subtotal,
+    addItem,
+    increaseQty,
+    decreaseQty,
+    removeItem,
+  } = useCart();
 
   const filteredPlants = useMemo(() => {
-    if (activeTab === "All Plant") return plants;
-    return plants.filter((plant) => plant.category === activeTab);
-  }, [activeTab]);
+    const tabFiltered =
+      activeTab === "All Plant"
+        ? plants
+        : plants.filter((plant) => plant.category === activeTab);
+
+    const normalizedQuery = searchQuery.trim().toLowerCase();
+    if (!normalizedQuery) return tabFiltered;
+
+    return tabFiltered.filter((plant) => {
+      const haystack = `${plant.name} ${plant.description} ${plant.category}`.toLowerCase();
+      return haystack.includes(normalizedQuery);
+    });
+  }, [activeTab, searchQuery]);
 
   return (
     <>
-      <Header onProfileClick={() => setProfileOpen(true)} />
+      <Header
+        onProfileClick={() => setProfileOpen(true)}
+        onNotificationClick={() => setNotificationOpen(true)}
+        onCartClick={() => setCartOpen(true)}
+        cartCount={itemCount}
+      />
 
       <main className="px-6 py-8 md:px-10">
         <div className="mx-auto max-w-7xl">
@@ -151,6 +186,13 @@ export default function PlantPage() {
           <p className="mt-5 text-xl font-semibold text-[#1f1f1f]">
             Discover your perfect green companion from our curated selection
           </p>
+          <div className="mt-6">
+            <SearchBar
+              value={searchQuery}
+              onChange={setSearchQuery}
+              placeholder="Search plants by name or type..."
+            />
+          </div>
 
           <div className="mt-8 flex flex-wrap gap-4">
             {(["All Plant", "Indoor Plant", "Outdoor Plant"] as PlantCategory[]).map(
@@ -202,7 +244,18 @@ export default function PlantPage() {
                       </p>
                     </div>
 
-                    <button className="rounded-full bg-[#8fc48f] p-2 text-[#1d4e2a] transition hover:bg-[#7fb77f]">
+                    <button
+                      onClick={() => {
+                        addItem({
+                          id: plant.name,
+                          name: plant.name,
+                          price: plant.price,
+                          image: plant.image,
+                        });
+                        setCartOpen(true);
+                      }}
+                      className="rounded-full bg-[#8fc48f] p-2 text-[#1d4e2a] transition hover:bg-[#7fb77f]"
+                    >
                       <ShoppingCart className="h-4 w-4" />
                     </button>
                   </div>
@@ -215,6 +268,19 @@ export default function PlantPage() {
 
       <Footer />
       <ProfileSidebar open={profileOpen} onClose={() => setProfileOpen(false)} />
+      <NotificationSidebar
+        open={notificationOpen}
+        onClose={() => setNotificationOpen(false)}
+      />
+      <CartSidebar
+        open={cartOpen}
+        onClose={() => setCartOpen(false)}
+        items={items}
+        subtotal={subtotal}
+        onIncrease={increaseQty}
+        onDecrease={decreaseQty}
+        onRemove={removeItem}
+      />
     </>
   );
 }
