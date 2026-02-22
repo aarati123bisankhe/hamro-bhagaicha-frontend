@@ -212,7 +212,7 @@ export default function LoginForm() {
         <span
           className="text-sm hover:underline cursor-pointer"
           style={{ color: "#021c71ff" }}
-          onClick={() => router.push("/forgotpassword")}
+          onClick={() => router.push("/request-reset-password")}
         >
           Forgot Password?
         </span>
