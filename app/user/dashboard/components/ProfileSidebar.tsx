@@ -55,13 +55,11 @@ export default function ProfileSidebar({ open, onClose }: ProfileSidebarProps) {
       />
 
       <div className="fixed right-0 top-0 h-full w-[360px] bg-[#f8f7f3] z-50 shadow-xl p-5 flex flex-col transition-transform duration-300">
-        {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <h2 className="font-bold text-lg text-[#2f5d3a]">Profile</h2>
           <button onClick={onClose} className="text-xl">✕</button>
         </div>
 
-        {/* Avatar */}
         <div className="flex items-center gap-4 mb-6">
           <div className="h-16 w-16 overflow-hidden rounded-full bg-[#7c8f7a] text-white flex items-center justify-center text-xl">
             {profileUrl ? (
