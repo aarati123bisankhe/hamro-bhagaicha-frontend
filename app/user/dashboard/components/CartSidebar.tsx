@@ -1,6 +1,7 @@
 "use client";
 
 import { Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import type { CartItem } from "./useCart";
 
 interface CartSidebarProps {
@@ -22,6 +23,8 @@ export default function CartSidebar({
   onDecrease,
   onRemove,
 }: CartSidebarProps) {
+  const router = useRouter();
+
   if (!open) return null;
 
   return (
@@ -99,7 +102,14 @@ export default function CartSidebar({
             <span className="text-gray-600">Subtotal</span>
             <span className="font-semibold text-[#1d4e2a]">NPR {subtotal}</span>
           </div>
-          <button className="w-full rounded-xl bg-[#2f5d3a] p-3 font-semibold text-white hover:bg-[#264a2e]">
+          <button
+            onClick={() => {
+              onClose();
+              router.push("/user/dashboard/checkout");
+            }}
+            disabled={items.length === 0}
+            className="w-full rounded-xl bg-[#2f5d3a] p-3 font-semibold text-white hover:bg-[#264a2e] disabled:cursor-not-allowed disabled:opacity-50"
+          >
             Checkout
           </button>
         </div>

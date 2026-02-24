@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useSyncExternalStore } from "react";
 
 export type CartItem = {
   id: string;
@@ -11,73 +11,105 @@ export type CartItem = {
 };
 
 const CART_STORAGE_KEY = "hb_cart_items";
+const CART_EVENT = "hb_cart_change";
+const EMPTY_CART: CartItem[] = [];
+
+let cachedRawCart = "";
+let cachedCartItems: CartItem[] = EMPTY_CART;
+
+function readCartItems(): CartItem[] {
+  if (typeof window === "undefined") return [];
+
+  try {
+    const raw = localStorage.getItem(CART_STORAGE_KEY) ?? "";
+    if (raw === cachedRawCart) return cachedCartItems;
+    if (!raw) {
+      cachedRawCart = "";
+      cachedCartItems = EMPTY_CART;
+      return cachedCartItems;
+    }
+
+    const parsed = JSON.parse(raw) as CartItem[];
+    cachedRawCart = raw;
+    cachedCartItems = Array.isArray(parsed) ? parsed : EMPTY_CART;
+    return cachedCartItems;
+  } catch {
+    cachedRawCart = "";
+    cachedCartItems = EMPTY_CART;
+    return cachedCartItems;
+  }
+}
+
+function writeCartItems(items: CartItem[]) {
+  if (typeof window === "undefined") return;
+
+  const serialized = JSON.stringify(items);
+  cachedRawCart = serialized;
+  cachedCartItems = items;
+  localStorage.setItem(CART_STORAGE_KEY, serialized);
+  window.dispatchEvent(new Event(CART_EVENT));
+}
 
 export function useCart() {
-  const [items, setItems] = useState<CartItem[]>(() => {
-    if (typeof window === "undefined") return [];
-    try {
-      const raw = localStorage.getItem(CART_STORAGE_KEY);
-      if (!raw) return [];
-      const parsed = JSON.parse(raw) as CartItem[];
-      return Array.isArray(parsed) ? parsed : [];
-    } catch {
-      return [];
-    }
-  });
+  const items = useSyncExternalStore(
+    (onStoreChange) => {
+      if (typeof window === "undefined") return () => {};
 
-  useEffect(() => {
-    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
-  }, [items]);
+      const onStorage = (event: StorageEvent) => {
+        if (event.key === CART_STORAGE_KEY) onStoreChange();
+      };
 
-  useEffect(() => {
-    const syncFromOtherTabs = (event: StorageEvent) => {
-      if (event.key !== CART_STORAGE_KEY || !event.newValue) return;
-      try {
-        const parsed = JSON.parse(event.newValue) as CartItem[];
-        if (Array.isArray(parsed)) setItems(parsed);
-      } catch {
-        setItems([]);
-      }
-    };
+      window.addEventListener("storage", onStorage);
+      window.addEventListener(CART_EVENT, onStoreChange);
 
-    window.addEventListener("storage", syncFromOtherTabs);
-    return () => window.removeEventListener("storage", syncFromOtherTabs);
-  }, []);
+      return () => {
+        window.removeEventListener("storage", onStorage);
+        window.removeEventListener(CART_EVENT, onStoreChange);
+      };
+    },
+    readCartItems,
+    () => []
+  );
 
   const addItem = (item: Omit<CartItem, "quantity">) => {
-    setItems((prev) => {
-      const existing = prev.find((entry) => entry.id === item.id);
-      if (existing) {
-        return prev.map((entry) =>
+    const current = readCartItems();
+    const existing = current.find((entry) => entry.id === item.id);
+
+    const next = existing
+      ? current.map((entry) =>
           entry.id === item.id
             ? { ...entry, quantity: entry.quantity + 1 }
             : entry
-        );
-      }
-      return [...prev, { ...item, quantity: 1 }];
-    });
+        )
+      : [...current, { ...item, quantity: 1 }];
+
+    writeCartItems(next);
   };
 
   const increaseQty = (id: string) => {
-    setItems((prev) =>
-      prev.map((entry) =>
-        entry.id === id ? { ...entry, quantity: entry.quantity + 1 } : entry
-      )
+    const next = readCartItems().map((entry) =>
+      entry.id === id ? { ...entry, quantity: entry.quantity + 1 } : entry
     );
+    writeCartItems(next);
   };
 
   const decreaseQty = (id: string) => {
-    setItems((prev) =>
-      prev
-        .map((entry) =>
-          entry.id === id ? { ...entry, quantity: entry.quantity - 1 } : entry
-        )
-        .filter((entry) => entry.quantity > 0)
-    );
+    const next = readCartItems()
+      .map((entry) =>
+        entry.id === id ? { ...entry, quantity: entry.quantity - 1 } : entry
+      )
+      .filter((entry) => entry.quantity > 0);
+
+    writeCartItems(next);
   };
 
   const removeItem = (id: string) => {
-    setItems((prev) => prev.filter((entry) => entry.id !== id));
+    const next = readCartItems().filter((entry) => entry.id !== id);
+    writeCartItems(next);
+  };
+
+  const clearCart = () => {
+    writeCartItems([]);
   };
 
   const itemCount = useMemo(
@@ -98,5 +130,6 @@ export function useCart() {
     increaseQty,
     decreaseQty,
     removeItem,
+    clearCart,
   };
 }
