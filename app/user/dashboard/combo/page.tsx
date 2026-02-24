@@ -133,8 +133,15 @@ export default function ComboPage() {
   const [searchQuery, setSearchQuery] = useState(
     () => searchParams.get("search") ?? ""
   );
-  const { items, itemCount, subtotal, increaseQty, decreaseQty, removeItem } =
-    useCart();
+  const {
+    items,
+    itemCount,
+    subtotal,
+    addItem,
+    increaseQty,
+    decreaseQty,
+    removeItem,
+  } = useCart();
 
   const filteredCombos = useMemo(() => {
     const normalizedQuery = searchQuery.trim().toLowerCase();
@@ -226,7 +233,18 @@ export default function ComboPage() {
                       </div>
                     </div>
 
-                    <button className="rounded-full bg-[#8fc48f] p-2 text-[#1d4e2a] transition hover:bg-[#7fb77f]">
+                    <button
+                      onClick={() => {
+                        addItem({
+                          id: `combo-${combo.name}`,
+                          name: combo.name,
+                          price: combo.price,
+                          image: combo.image,
+                        });
+                        setCartOpen(true);
+                      }}
+                      className="rounded-full bg-[#8fc48f] p-2 text-[#1d4e2a] transition hover:bg-[#7fb77f]"
+                    >
                       <ShoppingCart className="h-4 w-4" />
                     </button>
                   </div>

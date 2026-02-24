@@ -126,8 +126,15 @@ export default function PotPage() {
   const [searchQuery, setSearchQuery] = useState(
     () => searchParams.get("search") ?? ""
   );
-  const { items, itemCount, subtotal, increaseQty, decreaseQty, removeItem } =
-    useCart();
+  const {
+    items,
+    itemCount,
+    subtotal,
+    addItem,
+    increaseQty,
+    decreaseQty,
+    removeItem,
+  } = useCart();
 
   const filteredPots = useMemo(() => {
     const tabFiltered =
@@ -223,7 +230,18 @@ export default function PotPage() {
                       </p>
                     </div>
 
-                    <button className="rounded-full bg-[#8fc48f] p-2 text-[#1d4e2a] transition hover:bg-[#7fb77f]">
+                    <button
+                      onClick={() => {
+                        addItem({
+                          id: `pot-${pot.name}`,
+                          name: pot.name,
+                          price: pot.price,
+                          image: pot.image,
+                        });
+                        setCartOpen(true);
+                      }}
+                      className="rounded-full bg-[#8fc48f] p-2 text-[#1d4e2a] transition hover:bg-[#7fb77f]"
+                    >
                       <ShoppingCart className="h-4 w-4" />
                     </button>
                   </div>
