@@ -76,6 +76,10 @@ export function saveOrder(order: OrderRecord) {
   writeOrders([order, ...current]);
 }
 
+export function getOrders() {
+  return readOrders();
+}
+
 export function getOrderById(orderId: string) {
   return readOrders().find((order) => order.id === orderId) ?? null;
 }
