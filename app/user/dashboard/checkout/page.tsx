@@ -19,9 +19,7 @@ const checkoutSchema = z.object({
   name: z.string().min(2, "Name is required"),
   address: z.string().min(5, "Address is required"),
   email: z.string().email("Enter a valid email"),
-  phone: z
-    .string()
-    .regex(/^[0-9+\-\s]{7,15}$/, "Enter a valid phone number"),
+  phone: z.string().regex(/^\+[1-9]\d{7,14}$/, "Use E.164 format (e.g. +97798XXXXXXXX)"),
   deliveryMethod: z.enum(["home", "pickup"]),
   paymentMethod: z.enum(["cod", "esewa"]),
 });
@@ -67,20 +65,27 @@ export default function CheckoutPage() {
     });
 
     try {
-      await fetch("/api/auth/send-order-confirmation-email", {
+      const response = await fetch("/api/sms/send-order-confirmation", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          email: values.email,
+          phone: values.phone,
+          phoneNumber: values.phone,
           customerName: values.name,
           orderId,
           total: subtotal,
+          totalAmount: subtotal,
         }),
       });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("SMS send failed:", errorText);
+      }
     } catch (error) {
-      console.error("Order confirmation email failed", error);
+      console.error("SMS notification failed", error);
     }
 
     clearCart();
@@ -142,7 +147,7 @@ export default function CheckoutPage() {
                 <input
                   {...register("phone")}
                   className="w-full rounded-lg border border-[#cfd8c8] px-3 py-2 outline-none focus:border-[#2f5d3a]"
-                  placeholder="98XXXXXXXX"
+                  placeholder="+97798XXXXXXXX"
                 />
                 {errors.phone && (
                   <p className="mt-1 text-xs text-red-500">{errors.phone.message}</p>
