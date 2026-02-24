@@ -33,12 +33,42 @@ export default function ProfileSidebar({ open, onClose }: ProfileSidebarProps) {
   if (!open) return null;
 
   const menuItems = [
-    { label: "My Profile", action: () => router.push("/user/profile") },
-    { label: "My Plants", path: "/user/dashboard/plant" },
-    { label: "Orders", path: "/user/orders" },
-    { label: "Wishlist", path: "/wishlist" },
-    { label: "Care Schedule", path: "/care-schedule" },
-    { label: "Settings", path: "/settings" },
+    {
+      label: "My Profile",
+      description: "Manage your personal details",
+      icon: "👤",
+      action: () => router.push("/user/profile"),
+    },
+    {
+      label: "My Plants",
+      description: "View and shop plants",
+      icon: "🌿",
+      path: "/user/dashboard/plant",
+    },
+    {
+      label: "Orders",
+      description: "Track active and past orders",
+      icon: "📦",
+      path: "/user/orders",
+    },
+    {
+      label: "Wishlist",
+      description: "Your saved favorites",
+      icon: "💚",
+      path: "/wishlist",
+    },
+    {
+      label: "Care Schedule",
+      description: "Watering and care reminders",
+      icon: "🗓️",
+      path: "/care-schedule",
+    },
+    {
+      label: "Settings",
+      description: "Preferences and privacy",
+      icon: "⚙️",
+      path: "/settings",
+    },
   ];
 
   const handleLogout = async () => {
@@ -51,36 +81,62 @@ export default function ProfileSidebar({ open, onClose }: ProfileSidebarProps) {
     <>
       <div
         onClick={onClose}
-        className={`fixed inset-0 z-40 bg-black/30 backdrop-blur-sm transition-opacity duration-300`}
+        className="fixed inset-0 z-40 bg-[#122015]/35 backdrop-blur-sm transition-opacity duration-300"
       />
 
-      <div className="fixed right-0 top-0 h-full w-[360px] bg-[#f8f7f3] z-50 shadow-xl p-5 flex flex-col transition-transform duration-300">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="font-bold text-lg text-[#2f5d3a]">Profile</h2>
-          <button onClick={onClose} className="text-xl">✕</button>
-        </div>
+      <div className="fixed right-0 top-0 z-50 flex h-full w-full max-w-[390px] flex-col overflow-hidden border-l border-[#d5e1cd] bg-gradient-to-b from-[#f4f8ee] via-[#f9f7f3] to-[#eef4e8] shadow-2xl transition-transform duration-300">
+        <div className="relative overflow-hidden px-5 pb-6 pt-5">
+          <div className="pointer-events-none absolute -right-14 -top-20 h-40 w-40 rounded-full bg-[#bad4b2]/70 blur-2xl" />
+          <div className="pointer-events-none absolute -left-12 top-14 h-32 w-32 rounded-full bg-[#e1efdb]/80 blur-2xl" />
 
-        <div className="flex items-center gap-4 mb-6">
-          <div className="h-16 w-16 overflow-hidden rounded-full bg-[#7c8f7a] text-white flex items-center justify-center text-xl">
-            {profileUrl ? (
-              <img
-                src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/profile/${profileUrl}`}
-                alt={displayName}
-                className="h-full w-full object-cover"
-              />
-            ) : (
-              initial
-            )}
+          <div className="relative mb-5 flex items-center justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#678469]">
+                Account
+              </p>
+              <h2 className="text-2xl font-bold text-[#22462e]">Profile Hub</h2>
+            </div>
+            <button
+              onClick={onClose}
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-[#c6d8bc] bg-white/80 text-lg text-[#35543c] transition hover:bg-white"
+              aria-label="Close sidebar"
+            >
+              ✕
+            </button>
           </div>
 
-          <div>
-            <h3 className="font-semibold">{displayName}</h3>
-            <p className="text-sm text-gray-500">{displayEmail}</p>
+          <div className="relative rounded-2xl border border-[#d4e2cc] bg-white/80 p-4 shadow-sm backdrop-blur-sm">
+            <div className="mb-3 flex items-center gap-3">
+              <div className="h-16 w-16 overflow-hidden rounded-2xl border border-[#dbe8d4] bg-[#7c8f7a] text-white flex items-center justify-center text-2xl shadow-sm">
+                {profileUrl ? (
+                  <img
+                    src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/profile/${profileUrl}`}
+                    alt={displayName}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  initial
+                )}
+              </div>
+
+              <div className="min-w-0">
+                <h3 className="truncate text-base font-semibold text-[#23412d]">
+                  {displayName}
+                </h3>
+                <p className="truncate text-sm text-[#57725b]">{displayEmail}</p>
+              </div>
+            </div>
+
+            <div className="rounded-xl bg-[#edf5e8] px-3 py-2 text-xs font-medium text-[#436648]">
+              🌱 Keep growing. Your garden journey is on track.
+            </div>
           </div>
         </div>
 
-        {/* Menu */}
-        <div className="space-y-3 flex-1 mt-4">
+        <div className="flex-1 space-y-3 overflow-y-auto px-5 pb-5">
+          <p className="mb-1 text-xs font-semibold uppercase tracking-[0.12em] text-[#6f8d71]">
+            Quick Access
+          </p>
           {menuItems.map((item) => (
             <div
               key={item.label}
@@ -93,15 +149,31 @@ export default function ProfileSidebar({ open, onClose }: ProfileSidebarProps) {
                   onClose();
                 }
               }}
-              className="bg-white p-3 rounded-xl shadow-sm flex justify-between items-center cursor-pointer hover:bg-green-50 transition"
+              className="group flex cursor-pointer items-center justify-between rounded-2xl border border-[#d7e5cf] bg-white/90 p-3 shadow-sm transition hover:-translate-y-0.5 hover:border-[#b8cfb2] hover:bg-[#f6fbf2] hover:shadow-md"
             >
-              <span>{item.label}</span>
-              <span className="text-gray-400">›</span>
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#eef6e7] text-lg">
+                  {item.icon}
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-[#23412d]">{item.label}</p>
+                  <p className="text-xs text-[#68846b]">{item.description}</p>
+                </div>
+              </div>
+              <span className="text-lg text-[#8aa58d] transition group-hover:translate-x-0.5">
+                ›
+              </span>
             </div>
           ))}
 
-          <div className="bg-white p-3 rounded-xl shadow-sm flex justify-between items-center">
-            <span>Dark Mode</span>
+          <div className="mt-2 rounded-2xl border border-[#d7e5cf] bg-white/90 p-3 shadow-sm">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-semibold text-[#23412d]">Dark Mode</p>
+                <p className="text-xs text-[#68846b]">
+                  Switch theme for low-light browsing
+                </p>
+              </div>
             <button
               onClick={handleDarkModeToggle}
               className={`relative inline-flex h-7 w-16 items-center rounded-full transition ${
@@ -121,16 +193,17 @@ export default function ProfileSidebar({ open, onClose }: ProfileSidebarProps) {
                 {darkMode ? "" : "OFF"}
               </span>
             </button>
+            </div>
           </div>
-        </div>
 
-        {/* Logout */}
-        <button
-          onClick={handleLogout}
-          className="bg-[#e3ebdf] p-3 rounded-xl shadow-sm flex items-center justify-center hover:bg-green-50 text-red-600 font-medium mt-4 transition"
-        >
-          🚪 Logout
-        </button>
+          <button
+            onClick={handleLogout}
+            className="mt-2 flex w-full items-center justify-center gap-2 rounded-2xl border border-[#f0d0ce] bg-[#fff3f2] p-3 font-semibold text-[#b74841] shadow-sm transition hover:bg-[#ffe9e8]"
+          >
+            <span aria-hidden>🚪</span>
+            <span>Logout</span>
+          </button>
+        </div>
       </div>
     </>
   );
