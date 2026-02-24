@@ -6,6 +6,7 @@ import Footer from "../dashboard/components/Footer";
 import Header from "../dashboard/components/Header";
 import {
   cancelOrder,
+  deleteOrder,
   getOrders,
   type OrderRecord,
 } from "../dashboard/components/orderStore";
@@ -154,6 +155,17 @@ export default function OrdersPage() {
                     className="ml-3 inline-block rounded-lg border border-red-500 px-4 py-2 text-sm font-semibold text-red-600 disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     {order.orderStatus === "cancelled" ? "Cancelled" : "Cancel Order"}
+                  </button>
+                  <button
+                    onClick={() => {
+                      const shouldDelete = window.confirm(
+                        `Delete order ${order.id}? This cannot be undone.`
+                      );
+                      if (shouldDelete) deleteOrder(order.id);
+                    }}
+                    className="ml-3 inline-block rounded-lg border border-gray-400 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50"
+                  >
+                    Delete
                   </button>
                 </div>
               </article>

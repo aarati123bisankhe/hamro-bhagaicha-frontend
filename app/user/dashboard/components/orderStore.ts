@@ -88,6 +88,11 @@ export function cancelOrder(orderId: string) {
   writeOrders(next);
 }
 
+export function deleteOrder(orderId: string) {
+  const next = readOrders().filter((order) => order.id !== orderId);
+  writeOrders(next);
+}
+
 export function getOrderById(orderId: string) {
   return readOrders().find((order) => order.id === orderId) ?? null;
 }
