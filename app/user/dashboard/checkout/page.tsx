@@ -44,7 +44,7 @@ export default function CheckoutPage() {
     },
   });
 
-  const onSubmit = (values: CheckoutFormData) => {
+  const onSubmit = async (values: CheckoutFormData) => {
     if (items.length === 0) return;
 
     const orderId = createOrderId();
@@ -65,6 +65,23 @@ export default function CheckoutPage() {
       items,
       subtotal,
     });
+
+    try {
+      await fetch("/api/auth/send-order-confirmation-email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: values.email,
+          customerName: values.name,
+          orderId,
+          total: subtotal,
+        }),
+      });
+    } catch (error) {
+      console.error("Order confirmation email failed", error);
+    }
 
     clearCart();
     router.push(`/user/dashboard/order-confirmation/${orderId}`);
