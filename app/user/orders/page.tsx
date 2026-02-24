@@ -4,7 +4,11 @@ import Link from "next/link";
 import { useSyncExternalStore } from "react";
 import Footer from "../dashboard/components/Footer";
 import Header from "../dashboard/components/Header";
-import { getOrders, type OrderRecord } from "../dashboard/components/orderStore";
+import {
+  cancelOrder,
+  getOrders,
+  type OrderRecord,
+} from "../dashboard/components/orderStore";
 
 const ORDER_EVENT = "hb_order_change";
 
@@ -68,6 +72,11 @@ export default function OrdersPage() {
                 key={order.id}
                 className="rounded-2xl border border-[#d5ddce] bg-white p-5 shadow-sm"
               >
+                {order.orderStatus === "cancelled" && (
+                  <p className="mb-3 inline-block rounded-full bg-red-100 px-2.5 py-1 text-[11px] font-semibold text-red-700">
+                    Order Cancelled
+                  </p>
+                )}
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
                     <p className="text-xs text-[#6a7f6e]">Order ID</p>
@@ -134,6 +143,18 @@ export default function OrdersPage() {
                   >
                     View Full Detail
                   </Link>
+                  <button
+                    onClick={() => {
+                      const shouldCancel = window.confirm(
+                        `Cancel order ${order.id}?`
+                      );
+                      if (shouldCancel) cancelOrder(order.id);
+                    }}
+                    disabled={order.orderStatus === "cancelled"}
+                    className="ml-3 inline-block rounded-lg border border-red-500 px-4 py-2 text-sm font-semibold text-red-600 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {order.orderStatus === "cancelled" ? "Cancelled" : "Cancel Order"}
+                  </button>
                 </div>
               </article>
             ))}

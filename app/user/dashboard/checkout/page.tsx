@@ -61,6 +61,7 @@ export default function CheckoutPage() {
       deliveryMethod: values.deliveryMethod as DeliveryMethod,
       paymentMethod: values.paymentMethod as PaymentMethod,
       paymentStatus: values.paymentMethod === "esewa" ? "paid" : "pending",
+      orderStatus: "placed",
       items,
       subtotal,
     });

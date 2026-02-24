@@ -23,6 +23,7 @@ export type OrderRecord = {
   deliveryMethod: DeliveryMethod;
   paymentMethod: PaymentMethod;
   paymentStatus: "pending" | "paid";
+  orderStatus?: "placed" | "cancelled";
   items: OrderItem[];
   subtotal: number;
 };
@@ -78,6 +79,13 @@ export function saveOrder(order: OrderRecord) {
 
 export function getOrders() {
   return readOrders();
+}
+
+export function cancelOrder(orderId: string) {
+  const next = readOrders().map((order) =>
+    order.id === orderId ? ({ ...order, orderStatus: "cancelled" } as OrderRecord) : order
+  );
+  writeOrders(next);
 }
 
 export function getOrderById(orderId: string) {

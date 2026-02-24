@@ -58,8 +58,16 @@ export default function ConfirmationPage() {
           <section className="rounded-2xl border border-[#d5ddce] bg-white p-6 shadow-sm">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
-                <p className="text-sm text-[#628064]">Order Confirmed</p>
-                <h1 className="text-3xl font-semibold text-[#1f4f2a]">Thank you for your order</h1>
+                <p className="text-sm text-[#628064]">
+                  {order.orderStatus === "cancelled"
+                    ? "Order Cancelled"
+                    : "Order Confirmed"}
+                </p>
+                <h1 className="text-3xl font-semibold text-[#1f4f2a]">
+                  {order.orderStatus === "cancelled"
+                    ? "This order has been cancelled"
+                    : "Thank you for your order"}
+                </h1>
                 <p className="mt-1 text-sm text-[#4d5f50]">Order ID: {order.id}</p>
               </div>
               <p className="rounded-full bg-[#e8f2e7] px-3 py-1 text-xs font-semibold text-[#23522f]">
