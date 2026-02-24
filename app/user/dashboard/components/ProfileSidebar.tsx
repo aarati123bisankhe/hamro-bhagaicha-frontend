@@ -34,7 +34,7 @@ export default function ProfileSidebar({ open, onClose }: ProfileSidebarProps) {
 
   const menuItems = [
     { label: "My Profile", action: () => router.push("/user/profile") },
-    { label: "My Plants", path: "/user/plants" },
+    { label: "My Plants", path: "/user/dashboard/plant" },
     { label: "Orders", path: "/user/orders" },
     { label: "Wishlist", path: "/wishlist" },
     { label: "Care Schedule", path: "/care-schedule" },
