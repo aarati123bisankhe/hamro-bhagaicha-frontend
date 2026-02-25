@@ -12,121 +12,9 @@ import CartSidebar from "../components/CartSidebar";
 import { useCart } from "../components/useCart";
 import SearchBar from "../components/SearchBar";
 import { useWishlist } from "../components/useWishlist";
+import { useCatalog } from "../components/catalogStore";
 
 type PlantCategory = "All Plant" | "Indoor Plant" | "Outdoor Plant";
-
-type PlantItem = {
-  name: string;
-  description: string;
-  rating: number;
-  reviews: number;
-  price: number;
-  category: Exclude<PlantCategory, "All Plant">;
-  image: string;
-};
-
-const plants: PlantItem[] = [
-  {
-    name: "Monstera Deliciosa",
-    description: "Large, glossy leaves with natural splits.",
-    rating: 4.8,
-    reviews: 84,
-    price: 1200,
-    category: "Indoor Plant",
-    image:
-      "/images/monsteradeliciosa.webp",
-  },
-  {
-    name: "Snake Plant",
-    description: "Low maintenance, air purifying champion.",
-    rating: 4.9,
-    reviews: 90,
-    price: 500,
-    category: "Indoor Plant",
-    image:
-      "/images/snakeplant1.webp",
-  },
-  {
-    name: "Fiddle Leaf Fig",
-    description: "Statement plant with violin shaped leaves.",
-    rating: 4.7,
-    reviews: 204,
-    price: 3500,
-    category: "Indoor Plant",
-    image:
-      "/images/Fiddle Leaf Fig.webp",
-  },
-  {
-    name: "Jade Plant",
-    description: "Lucky plant with thick and glossy leaves.",
-    rating: 4.8,
-    reviews: 566,
-    price: 1500,
-    category: "Indoor Plant",
-    image:
-      "/images/Jade Plant.webp",
-  },
-  {
-    name: "Aloe Vera Plant",
-    description: "Medicinal wonder, easy to care.",
-    rating: 4.9,
-    reviews: 39,
-    price: 900,
-    category: "Outdoor Plant",
-    image:
-      "/images/Aloe Vera Plant.webp",
-  },
-  {
-    name: "Peace Lily",
-    description: "White blooms and elegant dark foliage.",
-    rating: 4.9,
-    reviews: 26,
-    price: 1800,
-    category: "Indoor Plant",
-    image:
-      "/images/peacelily.png",
-  },
-  {
-    name: "Hibiscus",
-    description: "Tropical beauty with vibrant blooms.",
-    rating: 4.8,
-    reviews: 134,
-    price: 2200,
-    category: "Outdoor Plant",
-    image:
-      "/images/habiscus.png",
-  },
-  {
-    name: "Rubber Plant",
-    description: "Bold, glossy leaves in deep green.",
-    rating: 4.8,
-    reviews: 82,
-    price: 2800,
-    category: "Indoor Plant",
-    image:
-      "/images/Rubber Plant.png",
-  },
-  {
-    name: "Bird of Paradise",
-    description: "Dramatic tropical statement plant.",
-    rating: 4.8,
-    reviews: 64,
-    price: 2400,
-    category: "Outdoor Plant",
-    image:
-      "/images/birdofpradise.png",
-  },
-  {
-    name: "ZZ Plant",
-    description: "Nearly indestructible, perfect for office.",
-    rating: 4.8,
-    reviews: 74,
-    price: 1600,
-    category: "Indoor Plant",
-    image:
-      "/images/zz.png",
-  },
-];
 
 export default function PlantPage() {
   const searchParams = useSearchParams();
@@ -147,6 +35,7 @@ export default function PlantPage() {
     removeItem,
   } = useCart();
   const { isWishlisted, toggleItem } = useWishlist();
+  const { items: plants } = useCatalog("plant");
 
   const filteredPlants = useMemo(() => {
     const tabFiltered =
@@ -161,7 +50,7 @@ export default function PlantPage() {
       const haystack = `${plant.name} ${plant.description} ${plant.category}`.toLowerCase();
       return haystack.includes(normalizedQuery);
     });
-  }, [activeTab, searchQuery]);
+  }, [activeTab, plants, searchQuery]);
 
   return (
     <>
@@ -216,7 +105,7 @@ export default function PlantPage() {
 
           <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
             {filteredPlants.map((plant) => {
-              const wishlistId = `plant-${plant.name}`;
+              const wishlistId = plant.id;
               const saved = isWishlisted(wishlistId);
 
               return (
@@ -233,7 +122,7 @@ export default function PlantPage() {
                     <button
                       onClick={() =>
                         toggleItem({
-                          id: wishlistId,
+                            id: wishlistId,
                           type: "plant",
                           name: plant.name,
                           description: plant.description,
@@ -275,7 +164,7 @@ export default function PlantPage() {
                       <button
                         onClick={() => {
                           addItem({
-                            id: plant.name,
+                            id: plant.id,
                             name: plant.name,
                             price: plant.price,
                             image: plant.image,

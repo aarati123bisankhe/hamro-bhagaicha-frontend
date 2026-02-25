@@ -12,111 +12,9 @@ import CartSidebar from "../components/CartSidebar";
 import { useCart } from "../components/useCart";
 import SearchBar from "../components/SearchBar";
 import { useWishlist } from "../components/useWishlist";
+import { useCatalog } from "../components/catalogStore";
 
 type PotCategory = "All Pot" | "Hanging";
-
-type PotItem = {
-  name: string;
-  description: string;
-  rating: number;
-  reviews: number;
-  price: number;
-  category: PotCategory;
-  image: string;
-};
-
-const pots: PotItem[] = [
-  {
-    name: "Minimalist White Ceramic",
-    description: "A beautiful planter for modern interiors.",
-    rating: 4.8,
-    reviews: 94,
-    price: 500,
-    category: "All Pot",
-    image:
-      "/images/ceramic.png",
-  },
-  {
-    name: "Rustic Terracotta Classic",
-    description: "Traditional clay, breathable for roots.",
-    rating: 4.1,
-    reviews: 128,
-    price: 450,
-    category: "All Pot",
-    image:
-      "/images/rustic.png",
-  },
-  {
-    name: "Geometric Modern Planter",
-    description: "Angular design for statement spaces.",
-    rating: 4.7,
-    reviews: 204,
-    price: 1200,
-    category: "All Pot",
-    image:
-      "/images/geometric.png",
-  },
-  {
-    name: "Sage Green Ceramic Set",
-    description: "Matching trio, calming color palette.",
-    rating: 4.8,
-    reviews: 930,
-    price: 1500,
-    category: "All Pot",
-    image:
-      "/images/sage.png",
-  },
-  {
-    name: "Textured Concrete Planter",
-    description: "Industrial look with durable build.",
-    rating: 4.7,
-    reviews: 128,
-    price: 950,
-    category: "All Pot",
-    image:
-      "/images/Textured.png",
-  },
-  {
-    name: "Glazed Blue Ceramic",
-    description: "Rich glaze with ocean-inspired tones.",
-    rating: 4.8,
-    reviews: 84,
-    price: 1100,
-    category: "All Pot",
-    image:
-      "/images/Glazed.png",
-  },
-  {
-    name: "Woven Seagrass Basket",
-    description: "Natural fiber, eco-friendly feel.",
-    rating: 4.9,
-    reviews: 223,
-    price: 750,
-    category: "All Pot",
-    image:
-      "/images/basket.png",
-  },
-  {
-    name: "Marble Effect Ceramic",
-    description: "Luxury look at an affordable price.",
-    rating: 4.8,
-    reviews: 363,
-    price: 1350,
-    category: "All Pot",
-    image:
-      "/images/creamy.png",
-  },
-  {
-    name: "Copper Hanging Planter",
-    description: "Metallic accent, eye-catching shape.",
-    rating: 4.8,
-    reviews: 65,
-    price: 1400,
-    category: "Hanging",
-    image:
-      "/images/hanging.png",
-  },
-];
 
 export default function PotPage() {
   const searchParams = useSearchParams();
@@ -137,6 +35,7 @@ export default function PotPage() {
     removeItem,
   } = useCart();
   const { isWishlisted, toggleItem } = useWishlist();
+  const { items: pots } = useCatalog("pot");
 
   const filteredPots = useMemo(() => {
     const tabFiltered =
@@ -151,7 +50,7 @@ export default function PotPage() {
       const haystack = `${pot.name} ${pot.description} ${pot.category}`.toLowerCase();
       return haystack.includes(normalizedQuery);
     });
-  }, [activeTab, searchQuery]);
+  }, [activeTab, pots, searchQuery]);
 
   return (
     <>
@@ -204,7 +103,7 @@ export default function PotPage() {
 
           <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
             {filteredPots.map((pot) => {
-              const wishlistId = `pot-${pot.name}`;
+              const wishlistId = pot.id;
               const saved = isWishlisted(wishlistId);
 
               return (
@@ -261,7 +160,7 @@ export default function PotPage() {
                       <button
                         onClick={() => {
                           addItem({
-                            id: `pot-${pot.name}`,
+                            id: pot.id,
                             name: pot.name,
                             price: pot.price,
                             image: pot.image,
