@@ -31,9 +31,17 @@ export default function LoginForm() {
       if (!response.success) {
         throw new Error(response.message);
       }
-      startTransition(() => router.push("/user/dashboard"));
-    } catch (err: any) {
-      setError(err.message || "Login Failed");
+      const role = response.data?.role;
+      const roleRoute =
+        role === "admin"
+          ? "/admin"
+          : role === "seller"
+          ? "/seller/dashboard"
+          : "/user/dashboard";
+
+      startTransition(() => router.push(roleRoute));
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Login Failed");
     }
   };
 
@@ -116,4 +124,3 @@ export default function LoginForm() {
     </form>
   );
 }
-
