@@ -5,6 +5,7 @@ export type SellerProductCategory = "plant" | "pot" | "combo";
 
 export type SellerProduct = {
   id?: string;
+  _id?: string;
   sellerId?: string;
   name: string;
   description: string;
@@ -71,6 +72,28 @@ export const fetchSellerInventory = async (params?: {
         : error instanceof Error
         ? error.message
         : "Fetch inventory failed";
+
+    throw new Error(message);
+  }
+};
+
+export const deleteSellerProduct = async (productId: string) => {
+  try {
+    const response = await axios.delete<ApiResponse<null>>(
+      API.SELLER.PRODUCT.DELETE(productId)
+    );
+    return response.data;
+  } catch (error: unknown) {
+    const message =
+      typeof error === "object" &&
+      error !== null &&
+      "response" in error &&
+      typeof (error as { response?: { data?: { message?: string } } }).response?.data
+        ?.message === "string"
+        ? (error as { response?: { data?: { message?: string } } }).response!.data!.message!
+        : error instanceof Error
+        ? error.message
+        : "Delete product failed";
 
     throw new Error(message);
   }

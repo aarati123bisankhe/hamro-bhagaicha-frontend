@@ -1,4 +1,7 @@
-import { handleGetSellerInventory } from "@/lib/actions/seller/product_action";
+import {
+  handleDeleteSellerProduct,
+  handleGetSellerInventory,
+} from "@/lib/actions/seller/product_action";
 
 export default async function InventoryPage() {
   const response = await handleGetSellerInventory();
@@ -23,7 +26,7 @@ export default async function InventoryPage() {
           <div className="space-y-3">
             {items.map((item) => (
               <div
-                key={item.id || `${item.name}-${item.createdAt || "item"}`}
+                key={item.id || item._id || `${item.name}-${item.createdAt || "item"}`}
                 className="rounded-lg border border-[#dbe8dc] p-4 flex items-start justify-between gap-4"
               >
                 <div className="min-w-0">
@@ -41,6 +44,25 @@ export default async function InventoryPage() {
                     </span>
                   </div>
                 </div>
+
+                <form
+                  action={async () => {
+                    "use server";
+
+                    const productId = item.id || item._id;
+                    if (!productId) return;
+
+                    await handleDeleteSellerProduct(productId);
+                  }}
+                >
+                  <button
+                    type="submit"
+                    disabled={!item.id && !item._id}
+                    className="rounded-md border border-[#efc8c8] px-3 py-1.5 text-sm font-medium text-[#b03c3c] hover:bg-[#fff3f3] disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    Delete
+                  </button>
+                </form>
               </div>
             ))}
           </div>

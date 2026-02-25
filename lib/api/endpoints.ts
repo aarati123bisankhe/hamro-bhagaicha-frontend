@@ -21,6 +21,7 @@ export const API = {
     PRODUCT: {
       CREATE: "/api/seller/products",
       INVENTORY: "/api/seller/products/inventory",
+      DELETE: (productId: string) => `/api/seller/products/${productId}`,
     },
   },
 };

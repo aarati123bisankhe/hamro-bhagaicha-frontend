@@ -2,10 +2,12 @@
 
 import {
   createSellerProduct,
+  deleteSellerProduct,
   fetchSellerInventory,
   type CreateSellerProductPayload,
 } from "@/lib/api/seller/product";
 import { getUserData } from "@/lib/cookie";
+import { revalidatePath } from "next/cache";
 
 export const handleCreateSellerProduct = async (
   payload: Omit<CreateSellerProductPayload, "sellerId">
@@ -67,6 +69,39 @@ export const handleGetSellerInventory = async (search?: string) => {
       success: false,
       message: error instanceof Error ? error.message : "Fetch inventory action failed",
       data: [],
+    };
+  }
+};
+
+export const handleDeleteSellerProduct = async (productId: string) => {
+  try {
+    if (!productId) {
+      return {
+        success: false,
+        message: "Product id is required",
+      };
+    }
+
+    const response = await deleteSellerProduct(productId);
+
+    if (response.success === false) {
+      return {
+        success: false,
+        message: response.message || "Failed to delete product",
+      };
+    }
+
+    revalidatePath("/seller/dashboard/inventory");
+    revalidatePath("/seller/dashboard/sales");
+
+    return {
+      success: true,
+      message: response.message || "Product deleted successfully",
+    };
+  } catch (error: unknown) {
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : "Delete product action failed",
     };
   }
 };
