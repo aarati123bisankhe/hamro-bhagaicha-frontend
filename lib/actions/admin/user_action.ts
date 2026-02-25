@@ -36,7 +36,13 @@
 
 "use server";
 
-import { createUser, fetchUsers } from "@/lib/api/admin/user";
+import {
+  createUser,
+  deleteUserById,
+  fetchUsers,
+  updateUserById,
+  type UpdateAdminUserPayload,
+} from "@/lib/api/admin/user";
 import { revalidatePath } from "next/cache";
 
 export const handleCreateUser = async (formData: FormData) => {
@@ -62,10 +68,10 @@ export const handleCreateUser = async (formData: FormData) => {
       success: true,
       data: response.data,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     return {
       success: false,
-      message: error.message || "Create user failed",
+      message: error instanceof Error ? error.message : "Create user failed",
     };
   }
 };
@@ -80,34 +86,50 @@ export const getUsers = async () => {
 
 
 export const handleDeleteUser = async (id: string) => {
-    try {
-        const response = await deleteUser(id)
-        if (response.success) {
-            revalidatePath('/admin/users');
-            return {
-                success: true,
-                message: 'Delete user successful'
-            }
-        }
-        return {
-            success: false,
-            message: response.message || 'Delete user failed'
-        }
-    } catch (error: Error | any) {
-        return { success: false, message: error.message || 'Delete user action failed' }
-    }
-  }
-
-async function deleteUser(id: string) {
-  // Import the actual delete user API call from your API module
-  // This is a placeholder that should be replaced with the actual implementation
   try {
-    const response = await fetch(`/api/admin/users/${id}`, {
-      method: 'DELETE',
-    });
-    const data = await response.json();
-    return data;
-  } catch (error: any) {
-    return { success: false, message: error.message };
+    const response = await deleteUserById(id);
+    if (response.success) {
+      revalidatePath("/admin/users");
+      return {
+        success: true,
+        message: "Delete user successful",
+      };
+    }
+
+    return {
+      success: false,
+      message: response.message || "Delete user failed",
+    };
+  } catch (error: unknown) {
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : "Delete user action failed",
+    };
   }
-}
+};
+
+export const handleUpdateUser = async (
+  id: string,
+  payload: UpdateAdminUserPayload
+) => {
+  try {
+    const response = await updateUserById(id, payload);
+    if (response.success) {
+      revalidatePath("/admin/users");
+      return {
+        success: true,
+        message: response.message || "User updated successfully",
+      };
+    }
+
+    return {
+      success: false,
+      message: response.message || "Update user failed",
+    };
+  } catch (error: unknown) {
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : "Update user action failed",
+    };
+  }
+};

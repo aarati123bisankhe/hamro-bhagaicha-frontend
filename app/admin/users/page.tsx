@@ -55,10 +55,11 @@
 
 "use client";
 
-import { Key, useEffect, useState } from "react";
+import { Key, useEffect, useMemo, useState } from "react";
 import UsersTable from "./_components/UsersTable";
 import CreateUserModal from "./_components/CreateUserModel";
 import ViewUserModal from "./_components/ViewUserModel";
+import EditUserModal from "./_components/EditUserModal";
 import DeleteModal from "@/app/_components/DeleteModel";
 import { getUsers, handleDeleteUser } from "@/lib/actions/admin/user_action";
 import { toast } from "react-toastify";
@@ -77,17 +78,43 @@ export default function UsersPage() {
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [openCreate, setOpenCreate] = useState(false);
   const [viewUser, setViewUser] = useState<AdminUser | null>(null);
+  const [editUser, setEditUser] = useState<AdminUser | null>(null);
   const [deleteUser, setDeleteUser] = useState<AdminUser | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const USERS_PER_PAGE = 8;
 
-  // Load users from backend
+  const totalPages = useMemo(
+    () => Math.max(1, Math.ceil(users.length / USERS_PER_PAGE)),
+    [users.length]
+  );
+
+  const safeCurrentPage = Math.min(currentPage, totalPages);
+
+  const paginatedUsers = useMemo(() => {
+    const startIndex = (safeCurrentPage - 1) * USERS_PER_PAGE;
+    return users.slice(startIndex, startIndex + USERS_PER_PAGE);
+  }, [safeCurrentPage, users]);
+
   const loadUsers = async () => {
     const res = await getUsers();
     setUsers(res);
   };
 
   useEffect(() => {
-    loadUsers();
+    let active = true;
+
+    const run = async () => {
+      const res = await getUsers();
+      if (!active) return;
+      setUsers(res);
+    };
+
+    void run();
+
+    return () => {
+      active = false;
+    };
   }, []);
 
   // Trash icon click → open delete modal
@@ -103,7 +130,7 @@ export default function UsersPage() {
     const res = await handleDeleteUser(deleteUser._id.toString());
     if (res.success) {
       toast.success(res.message);
-      loadUsers(); // refresh table
+      await loadUsers();
     } else {
       toast.error(res.message);
     }
@@ -127,11 +154,44 @@ export default function UsersPage() {
 
       {/* Users Table */}
       <UsersTable
-        users={users}
+        users={paginatedUsers}
         onView={(u) => setViewUser(u)}
-        onEdit={(u) => console.log("Edit", u)} // Replace with edit modal later
+        onEdit={(u) => setEditUser(u)}
         onDelete={handleDeleteClick}
       />
+
+      {users.length > USERS_PER_PAGE && (
+        <div className="flex items-center justify-between gap-4 rounded-md bg-white px-4 py-3 shadow">
+          <p className="text-sm text-gray-600">
+            Showing {(safeCurrentPage - 1) * USERS_PER_PAGE + 1}-
+            {Math.min(safeCurrentPage * USERS_PER_PAGE, users.length)} of {users.length}
+          </p>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+              disabled={safeCurrentPage === 1}
+              className="rounded border px-3 py-1 text-sm disabled:opacity-50"
+            >
+              Previous
+            </button>
+
+            <span className="text-sm font-medium">
+              Page {safeCurrentPage} of {totalPages}
+            </span>
+
+            <button
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(totalPages, prev + 1))
+              }
+              disabled={safeCurrentPage === totalPages}
+              className="rounded border px-3 py-1 text-sm disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Create User Modal */}
       {openCreate && (
@@ -146,15 +206,23 @@ export default function UsersPage() {
         <ViewUserModal user={viewUser} onClose={() => setViewUser(null)} />
       )}
 
+      {editUser && (
+        <EditUserModal
+          key={editUser._id?.toString() ?? "edit-user"}
+          user={editUser}
+          onClose={() => setEditUser(null)}
+          onSuccess={loadUsers}
+        />
+      )}
+
       {/* Delete Confirmation Modal */}
       <DeleteModal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
         onConfirm={handleDeleteConfirm}
         title="Delete User"
-        description={`Are you sure you want to delete ${deleteUser?.role} @${deleteUser?.fullName}?`}
+        description={`Are you sure you want to delete ${deleteUser?.fullName}?`}
       />
     </div>
   );
 }
-
