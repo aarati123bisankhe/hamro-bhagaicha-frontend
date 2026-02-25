@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { clearAuthCookies } from "@/lib/cookie";
 import { useCurrentUser } from "./useCurrentUser";
 import { useWishlist } from "./useWishlist";
 import { useCareSchedule } from "./useCareSchedule";
+import { useUserSettings } from "./useUserSettings";
 
 interface ProfileSidebarProps {
   open: boolean;
@@ -17,21 +17,15 @@ export default function ProfileSidebar({ open, onClose }: ProfileSidebarProps) {
   const user = useCurrentUser();
   const { itemCount: wishlistCount } = useWishlist();
   const { pendingCount: carePendingCount } = useCareSchedule();
-  const [darkMode, setDarkMode] = useState(() => {
-    if (typeof window === "undefined") return false;
-    return localStorage.getItem("hb_theme") === "dark";
-  });
+  const { settings, updateSetting } = useUserSettings();
+  const darkMode = settings.theme === "dark";
   const displayName = user?.fullname || user?.fullName || user?.name || "Aarati";
   const displayEmail = user?.email || "aarati@example.com";
   const profileUrl = user?.profileUrl;
   const initial = displayName.charAt(0).toUpperCase();
 
   const handleDarkModeToggle = () => {
-    const next = !darkMode;
-    setDarkMode(next);
-    const theme = next ? "dark" : "light";
-    document.documentElement.setAttribute("data-theme", theme);
-    localStorage.setItem("hb_theme", theme);
+    updateSetting("theme", darkMode ? "light" : "dark");
   };
 
   if (!open) return null;
@@ -73,7 +67,7 @@ export default function ProfileSidebar({ open, onClose }: ProfileSidebarProps) {
       label: "Settings",
       description: "Preferences and privacy",
       icon: "⚙️",
-      path: "/settings",
+      path: "/user/dashboard/settings",
     },
   ];
 
