@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { clearAuthCookies } from "@/lib/cookie";
+import { useSellerUiSettings } from "./useSellerUiSettings";
 
 const menuItems = [
   { label: "Add New Product", href: "/seller/dashboard/add-product", icon: "➕" },
@@ -15,6 +16,7 @@ const menuItems = [
 export default function SellerSidebar() {
   const pathname = usePathname();
   const router = useRouter();
+  const { isDarkMode } = useSellerUiSettings();
 
   const handleLogout = async () => {
     await clearAuthCookies();
@@ -23,9 +25,19 @@ export default function SellerSidebar() {
   };
 
   return (
-    <aside className="w-72 min-h-screen bg-[#1f3b2e] text-white p-5">
+    <aside
+      className={`w-72 min-h-screen p-5 ${
+        isDarkMode ? "bg-[#0f1712] text-[#eaf4ed]" : "bg-[#1f3b2e] text-white"
+      }`}
+    >
       <div className="mb-8">
-        <p className="text-xs uppercase tracking-[0.14em] text-[#b8d7c1]">Seller</p>
+        <p
+          className={`text-xs uppercase tracking-[0.14em] ${
+            isDarkMode ? "text-[#9fc3a8]" : "text-[#b8d7c1]"
+          }`}
+        >
+          Seller
+        </p>
         <h1 className="text-2xl font-bold">Dashboard</h1>
       </div>
 
@@ -37,7 +49,11 @@ export default function SellerSidebar() {
               key={item.href}
               href={item.href}
               className={`flex items-center gap-3 rounded-lg px-3 py-2 transition ${
-                isActive ? "bg-[#2f5d46] text-white" : "text-[#deede3] hover:bg-[#2a4f3c]"
+                isActive
+                  ? "bg-[#2f5d46] text-white"
+                  : isDarkMode
+                  ? "text-[#cfe1d3] hover:bg-[#1d2c22]"
+                  : "text-[#deede3] hover:bg-[#2a4f3c]"
               }`}
             >
               <span>{item.icon}</span>
