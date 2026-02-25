@@ -9,7 +9,7 @@ const menuItems = [
   { label: "My Products / Inventory", href: "/seller/dashboard/inventory", icon: "📦" },
   { label: "Sales / Stats", href: "/seller/dashboard/sales", icon: "📈" },
   { label: "Notifications", href: "/seller/dashboard/notifications", icon: "🔔" },
-  { label: "Profile / Settings", href: "/seller/dashboard/settings", icon: "⚙️" },
+  { label: "Settings", href: "/seller/dashboard/settings", icon: "⚙️" },
 ];
 
 export default function SellerSidebar() {
@@ -48,7 +48,7 @@ export default function SellerSidebar() {
       </nav>
 
       <button
-        onClick={handleLogout} //logout 
+        onClick={handleLogout} 
         className="mt-8 w-full rounded-lg bg-[#ba3d3d] py-2 text-sm font-semibold transition hover:bg-[#a43131]"
       >
         Logout
