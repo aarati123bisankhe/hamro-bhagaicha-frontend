@@ -26,6 +26,49 @@ const checkoutSchema = z.object({
 
 type CheckoutFormData = z.infer<typeof checkoutSchema>;
 
+type OrderEmailItem = {
+  name: string;
+  quantity: number;
+  price: number;
+};
+
+type OrderEmailPayload = {
+  toEmail: string;
+  orderId: string;
+  customerName: string;
+  totalAmount: number;
+  currency: "NPR";
+  items: OrderEmailItem[];
+  shippingAddress: string;
+};
+
+type OrderEmailResponse = {
+  success?: boolean;
+  message?: string;
+  data?: unknown;
+};
+
+async function sendOrderEmail(payload: OrderEmailPayload) {
+  const res = await fetch("/api/checkout/send-order-confirmation-email", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+
+  let body: OrderEmailResponse | null = null;
+  try {
+    body = (await res.json()) as OrderEmailResponse;
+  } catch {
+    body = null;
+  }
+
+  if (!res.ok || !body?.success) {
+    throw new Error(body?.message || `Request failed (${res.status})`);
+  }
+
+  return body;
+}
+
 export default function CheckoutPage() {
   const router = useRouter();
   const { items, subtotal, itemCount, clearCart } = useCart();
@@ -64,8 +107,8 @@ export default function CheckoutPage() {
       subtotal,
     });
 
-    try {
-      const response = await fetch("/api/sms/send-order-confirmation", {
+    const notificationResults = await Promise.allSettled([
+      fetch("/api/sms/send-order-confirmation", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -78,18 +121,41 @@ export default function CheckoutPage() {
           total: subtotal,
           totalAmount: subtotal,
         }),
-      });
+      }),
+      sendOrderEmail({
+        toEmail: values.email,
+        orderId,
+        customerName: values.name,
+        totalAmount: subtotal,
+        currency: "NPR",
+        items: items.map((item) => ({
+          name: item.name,
+          quantity: item.quantity,
+          price: item.price,
+        })),
+        shippingAddress: values.address,
+      }),
+    ]);
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error("SMS send failed:", errorText);
-      }
-    } catch (error) {
-      console.error("SMS notification failed", error);
+    const smsResult = notificationResults[0];
+    const emailResult = notificationResults[1];
+
+    if (smsResult.status === "fulfilled" && !smsResult.value.ok) {
+      const errorText = await smsResult.value.text();
+      console.error("SMS send failed:", errorText);
+    } else if (smsResult.status === "rejected") {
+      console.error("SMS notification failed", smsResult.reason);
+    }
+
+    const emailFailed = emailResult.status === "rejected";
+    if (emailFailed) {
+      console.error("Email notification failed", emailResult.reason);
     }
 
     clearCart();
-    router.push(`/user/dashboard/order-confirmation/${orderId}`);
+    router.push(
+      `/user/dashboard/order-confirmation/${orderId}${emailFailed ? "?email=failed" : ""}`
+    );
   };
 
   return (

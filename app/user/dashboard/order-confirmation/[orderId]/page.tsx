@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useSyncExternalStore } from "react";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
@@ -33,8 +33,10 @@ function useOrder(orderId: string) {
 
 export default function ConfirmationPage() {
   const params = useParams<{ orderId: string }>();
+  const searchParams = useSearchParams();
   const orderId = params?.orderId ?? "";
   const order = useOrder(orderId);
+  const emailStatus = searchParams.get("email");
 
   return (
     <>
@@ -56,6 +58,11 @@ export default function ConfirmationPage() {
           </section>
         ) : (
           <section className="rounded-2xl border border-[#d5ddce] bg-white p-6 shadow-sm">
+            {emailStatus === "failed" && (
+              <div className="mb-4 rounded-lg border border-[#f0d0ce] bg-[#fff3f2] px-4 py-3 text-sm text-[#b74841]">
+                Order placed, but confirmation email failed.
+              </div>
+            )}
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
                 <p className="text-sm text-[#628064]">
