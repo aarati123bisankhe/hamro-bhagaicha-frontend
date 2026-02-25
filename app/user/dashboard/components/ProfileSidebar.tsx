@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { clearAuthCookies } from "@/lib/cookie";
 import { useCurrentUser } from "./useCurrentUser";
 import { useWishlist } from "./useWishlist";
+import { useCareSchedule } from "./useCareSchedule";
 
 interface ProfileSidebarProps {
   open: boolean;
@@ -15,6 +16,7 @@ export default function ProfileSidebar({ open, onClose }: ProfileSidebarProps) {
   const router = useRouter();
   const user = useCurrentUser();
   const { itemCount: wishlistCount } = useWishlist();
+  const { pendingCount: carePendingCount } = useCareSchedule();
   const [darkMode, setDarkMode] = useState(() => {
     if (typeof window === "undefined") return false;
     return localStorage.getItem("hb_theme") === "dark";
@@ -64,7 +66,8 @@ export default function ProfileSidebar({ open, onClose }: ProfileSidebarProps) {
       label: "Care Schedule",
       description: "Watering and care reminders",
       icon: "🗓️",
-      path: "/care-schedule",
+      path: "/user/dashboard/care-schedule",
+      count: carePendingCount,
     },
     {
       label: "Settings",
