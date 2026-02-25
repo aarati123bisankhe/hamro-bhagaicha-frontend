@@ -48,7 +48,7 @@ export default function SellerSidebar() {
       </nav>
 
       <button
-        onClick={handleLogout}
+        onClick={handleLogout} //logout 
         className="mt-8 w-full rounded-lg bg-[#ba3d3d] py-2 text-sm font-semibold transition hover:bg-[#a43131]"
       >
         Logout
