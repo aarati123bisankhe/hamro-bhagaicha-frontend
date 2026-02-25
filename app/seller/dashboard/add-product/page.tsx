@@ -1,14 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { useSellerProducts } from "../components/sellerProductStore";
+import { handleCreateSellerProduct } from "@/lib/actions/seller/product_action";
 
 type Category = "plant" | "pot" | "combo";
 
 export default function AddProductPage() {
   const router = useRouter();
-  const { addProduct } = useSellerProducts();
+  const [pending, startTransition] = useTransition();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState<Category>("plant");
@@ -50,17 +50,24 @@ export default function AddProductPage() {
       return;
     }
 
-    addProduct({
-      name: name.trim(),
-      description: description.trim(),
-      category,
-      price: parsedPrice,
-      stock: parsedStock,
-      imageUrl: imageUrl.trim() || undefined,
-    });
+    startTransition(async () => {
+      const response = await handleCreateSellerProduct({
+        name: name.trim(),
+        description: description.trim(),
+        category,
+        price: parsedPrice,
+        stock: parsedStock,
+        imageUrl: imageUrl.trim() || undefined,
+      });
 
-    setSuccess("Product added successfully.");
-    clearForm();
+      if (!response.success) {
+        setError(response.message || "Failed to add product.");
+        return;
+      }
+
+      setSuccess(response.message || "Product added successfully.");
+      clearForm();
+    });
   };
 
   return (
@@ -150,9 +157,10 @@ export default function AddProductPage() {
         <div className="flex gap-3">
           <button
             type="submit"
+            disabled={pending}
             className="rounded-lg bg-[#2f5d46] px-4 py-2 font-semibold text-white transition hover:bg-[#244937]"
           >
-            Save Product
+            {pending ? "Saving..." : "Save Product"}
           </button>
           <button
             type="button"

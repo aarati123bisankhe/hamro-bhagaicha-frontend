@@ -1,15 +1,11 @@
-"use client";
+import { handleGetSellerInventory } from "@/lib/actions/seller/product_action";
 
-import { useMemo } from "react";
-import { useSellerProducts } from "../components/sellerProductStore";
+export default async function SalesStatsPage() {
+  const response = await handleGetSellerInventory();
+  const items = response.data || [];
 
-export default function SalesStatsPage() {
-  const { items, totalStock } = useSellerProducts();
-
-  const inventoryValue = useMemo(
-    () => items.reduce((sum, item) => sum + item.price * item.stock, 0),
-    [items]
-  );
+  const totalStock = items.reduce((sum, item) => sum + item.stock, 0);
+  const inventoryValue = items.reduce((sum, item) => sum + item.price * item.stock, 0);
 
   return (
     <section className="space-y-4">
@@ -28,6 +24,10 @@ export default function SalesStatsPage() {
           <p className="text-2xl font-bold text-[#23412d]">NPR {inventoryValue}</p>
         </div>
       </div>
+
+      {!response.success && (
+        <p className="text-sm text-red-600">{response.message || "Failed to load stats."}</p>
+      )}
     </section>
   );
 }
