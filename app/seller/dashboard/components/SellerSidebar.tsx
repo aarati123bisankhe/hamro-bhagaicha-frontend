@@ -26,7 +26,7 @@ export default function SellerSidebar() {
 
   return (
     <aside
-      className={`w-72 min-h-screen p-5 ${
+      className={`flex w-72 min-h-screen flex-col p-5 ${
         isDarkMode ? "bg-[#0f1712] text-[#eaf4ed]" : "bg-[#1f3b2e] text-white"
       }`}
     >
@@ -65,7 +65,7 @@ export default function SellerSidebar() {
 
       <button
         onClick={handleLogout} 
-        className="mt-8 w-full rounded-lg bg-[#ba3d3d] py-2 text-sm font-semibold transition hover:bg-[#a43131]"
+        className="mt-auto w-full rounded-lg bg-[#ba3d3d] py-2 text-sm font-semibold transition hover:bg-[#a43131]"
       >
         Logout
       </button>
