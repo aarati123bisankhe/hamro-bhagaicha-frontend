@@ -74,3 +74,4 @@ export default function SellerNotificationsPage() {
     </section>
   );
 }
+ // complete the notication
