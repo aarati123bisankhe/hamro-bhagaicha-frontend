@@ -30,6 +30,3 @@ export default function SellerTopbar() {
     </header>
   );
 }
-
-
-// added the seller top bar
