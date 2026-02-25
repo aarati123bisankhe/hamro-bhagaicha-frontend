@@ -8,16 +8,40 @@ import { handleUpdateProfile } from "@/lib/actions/auth_action";
 export default function EditAdminProfileForm({
   admin,
   onCancel,
+  onSaved,
 }: {
-  admin: any;
+  admin: {
+    fullname?: string;
+    fullName?: string;
+    name?: string;
+    email?: string;
+    phoneNumber?: string;
+    phone?: string;
+    address?: string;
+    role?: string;
+    status?: string;
+    profileUrl?: string;
+  };
   onCancel: () => void;
+  onSaved: (updatedAdmin: {
+    fullname?: string;
+    fullName?: string;
+    name?: string;
+    email?: string;
+    phoneNumber?: string;
+    phone?: string;
+    address?: string;
+    role?: string;
+    status?: string;
+    profileUrl?: string;
+  }) => void;
 }) {
   const backendUrl = process.env.NEXT_PUBLIC_API_URL;
 
   const [form, setForm] = useState<UpdateAdminData>({
-    fullname: admin.fullName ?? "",
+    fullname: admin.fullname ?? admin.fullName ?? admin.name ?? "",
     email: admin.email ?? "",
-    phoneNumber: admin.phone ?? "",
+    phoneNumber: admin.phoneNumber ?? admin.phone ?? "",
     address: admin.address ?? "",
     profileUrl: undefined,
   });
@@ -48,12 +72,12 @@ export default function EditAdminProfileForm({
     try {
       const formData = new FormData();
 
-      formData.append("fullname", admin.fullname);
-      formData.append("email", admin.email);
-      formData.append("phoneNumber", admin.phoneNumber);
-      formData.append("address", admin.address);
-      formData.append("role", admin.role);
-      formData.append("status", admin.status);
+      formData.append("fullname", parsed.data.fullname);
+      formData.append("email", parsed.data.email);
+      formData.append("phoneNumber", parsed.data.phoneNumber);
+      formData.append("address", parsed.data.address);
+      formData.append("role", admin.role ?? "admin");
+      formData.append("status", admin.status ?? "active");
 
       if (parsed.data.profileUrl) {
         formData.append("profileUrl", parsed.data.profileUrl);
@@ -63,11 +87,34 @@ export default function EditAdminProfileForm({
 
       if (!res.success) throw new Error(res.message || "Update failed");
 
+      const updatedAdmin =
+        (res.data as {
+          fullname?: string;
+          fullName?: string;
+          name?: string;
+          email?: string;
+          phoneNumber?: string;
+          phone?: string;
+          address?: string;
+          role?: string;
+          status?: string;
+          profileUrl?: string;
+        }) ??
+        {
+          ...admin,
+          fullname: parsed.data.fullname,
+          email: parsed.data.email,
+          phoneNumber: parsed.data.phoneNumber,
+          address: parsed.data.address,
+        };
+
+      onSaved(updatedAdmin);
+      window.dispatchEvent(new Event("user-data-updated"));
       toast.success("Admin profile updated successfully");
-      onCancel();
-    } catch (err: any) {
-      toast.error(err.message || "Update failed");
-      setError(err.message);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Update failed";
+      toast.error(message);
+      setError(message);
     } finally {
       setLoading(false);
     }

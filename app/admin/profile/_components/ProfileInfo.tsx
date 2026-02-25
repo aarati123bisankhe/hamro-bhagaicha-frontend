@@ -4,9 +4,22 @@ export default function ProfileInfo({
     user,
     onEdit }: {
 
-    user: any,
+    user: {
+      fullname?: string;
+      fullName?: string;
+      name?: string;
+      email?: string;
+      phoneNumber?: string;
+      phone?: string;
+      address?: string;
+    },
     onEdit: () => void;
 }) {
+
+  const displayName = user.fullname ?? user.fullName ?? user.name ?? "-";
+  const displayPhone = user.phoneNumber ?? user.phone ?? "-";
+  const displayEmail = user.email ?? "-";
+  const displayAddress = user.address ?? "-";
 
   return (
     <div className="space-y-2 mt-5">
@@ -22,10 +35,10 @@ export default function ProfileInfo({
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-        <Info label="Full Name" value={user.fullname} />
-        <Info label="Email Address" value={user.email} />
-        <Info label="Phone Number" value={user.phoneNumber} />
-        <Info label="Address" value={user.address} />
+        <Info label="Full Name" value={displayName} />
+        <Info label="Email Address" value={displayEmail} />
+        <Info label="Phone Number" value={displayPhone} />
+        <Info label="Address" value={displayAddress} />
       </div>
     </div>
     </div>
