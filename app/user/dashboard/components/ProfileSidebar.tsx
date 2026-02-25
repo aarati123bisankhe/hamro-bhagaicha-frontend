@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { clearAuthCookies } from "@/lib/cookie";
 import { useCurrentUser } from "./useCurrentUser";
+import { useWishlist } from "./useWishlist";
 
 interface ProfileSidebarProps {
   open: boolean;
@@ -13,6 +14,7 @@ interface ProfileSidebarProps {
 export default function ProfileSidebar({ open, onClose }: ProfileSidebarProps) {
   const router = useRouter();
   const user = useCurrentUser();
+  const { itemCount: wishlistCount } = useWishlist();
   const [darkMode, setDarkMode] = useState(() => {
     if (typeof window === "undefined") return false;
     return localStorage.getItem("hb_theme") === "dark";
@@ -55,7 +57,8 @@ export default function ProfileSidebar({ open, onClose }: ProfileSidebarProps) {
       label: "Wishlist",
       description: "Your saved favorites",
       icon: "💚",
-      path: "/wishlist",
+      path: "/user/dashboard/wishlist",
+      count: wishlistCount,
     },
     {
       label: "Care Schedule",
@@ -160,9 +163,16 @@ export default function ProfileSidebar({ open, onClose }: ProfileSidebarProps) {
                   <p className="text-xs text-[#68846b]">{item.description}</p>
                 </div>
               </div>
-              <span className="text-lg text-[#8aa58d] transition group-hover:translate-x-0.5">
-                ›
-              </span>
+              <div className="flex items-center gap-2">
+                {typeof item.count === "number" && (
+                  <span className="rounded-full bg-[#e2f0dd] px-2 py-0.5 text-xs font-semibold text-[#355c3f]">
+                    {item.count}
+                  </span>
+                )}
+                <span className="text-lg text-[#8aa58d] transition group-hover:translate-x-0.5">
+                  ›
+                </span>
+              </div>
             </div>
           ))}
 

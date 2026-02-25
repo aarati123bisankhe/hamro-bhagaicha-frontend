@@ -1,6 +1,6 @@
 "use client";
 
-import { ShoppingCart, Star } from "lucide-react";
+import { Heart, ShoppingCart, Star } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
@@ -11,6 +11,7 @@ import ProfileSidebar from "../components/ProfileSidebar";
 import CartSidebar from "../components/CartSidebar";
 import { useCart } from "../components/useCart";
 import SearchBar from "../components/SearchBar";
+import { useWishlist } from "../components/useWishlist";
 
 type ComboItem = {
   name: string;
@@ -142,6 +143,7 @@ export default function ComboPage() {
     decreaseQty,
     removeItem,
   } = useCart();
+  const { isWishlisted, toggleItem } = useWishlist();
 
   const filteredCombos = useMemo(() => {
     const normalizedQuery = searchQuery.trim().toLowerCase();
@@ -193,64 +195,89 @@ export default function ComboPage() {
           </div>
 
           <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
-            {filteredCombos.map((combo) => (
-              <article
-                key={combo.name}
-                className="overflow-hidden rounded-3xl border border-[#d5ddce] bg-[#dce7d7] shadow-sm"
-              >
-                <div className="relative">
-                  <img
-                    src={combo.image}
-                    alt={combo.name}
-                    className="h-56 w-full bg-[#edf2e9] object-cover"
-                  />
-                  <span className="absolute right-3 top-3 rounded-full bg-[#5ab991] px-3 py-1 text-[10px] font-semibold text-white shadow">
-                    Save 20%
-                  </span>
-                </div>
+            {filteredCombos.map((combo) => {
+              const wishlistId = `combo-${combo.name}`;
+              const saved = isWishlisted(wishlistId);
 
-                <div className="space-y-2 px-4 py-3 text-[#143519]">
-                  <h3 className="text-base font-semibold">{combo.name}</h3>
-                  <p className="text-xs text-[#35543c]">{combo.description}</p>
-                  <p className="text-[10px] text-[#56735d]">{combo.details}</p>
-
-                  <div className="flex items-center gap-1 text-xs text-[#244a2d]">
-                    <Star className="h-3.5 w-3.5 fill-[#1f6a2f] text-[#1f6a2f]" />
-                    <span>{combo.rating}</span>
-                    <span className="text-[#45634b]">({combo.reviews} Reviews)</span>
-                  </div>
-
-                  <div className="mt-3 flex items-end justify-between border-t border-[#c6d1bf] pt-2">
-                    <div>
-                      <p className="text-xs text-[#56735d]">Started at</p>
-                      <div className="flex items-end gap-2">
-                        <p className="text-lg font-bold text-[#1d4e2a]">
-                          NPR {combo.price}
-                        </p>
-                        <p className="pb-0.5 text-xs text-[#6f7e72] line-through">
-                          NPR {combo.oldPrice}
-                        </p>
-                      </div>
-                    </div>
-
+              return (
+                <article
+                  key={combo.name}
+                  className="overflow-hidden rounded-3xl border border-[#d5ddce] bg-[#dce7d7] shadow-sm"
+                >
+                  <div className="relative">
+                    <img
+                      src={combo.image}
+                      alt={combo.name}
+                      className="h-56 w-full bg-[#edf2e9] object-cover"
+                    />
+                    <span className="absolute left-3 top-3 rounded-full bg-[#5ab991] px-3 py-1 text-[10px] font-semibold text-white shadow">
+                      Save 20%
+                    </span>
                     <button
-                      onClick={() => {
-                        addItem({
-                          id: `combo-${combo.name}`,
+                      onClick={() =>
+                        toggleItem({
+                          id: wishlistId,
+                          type: "combo",
                           name: combo.name,
+                          description: combo.description,
                           price: combo.price,
                           image: combo.image,
-                        });
-                        setCartOpen(true);
-                      }}
-                      className="rounded-full bg-[#8fc48f] p-2 text-[#1d4e2a] transition hover:bg-[#7fb77f]"
+                        })
+                      }
+                      className={`absolute right-3 top-3 rounded-full p-2 shadow-sm transition ${
+                        saved
+                          ? "bg-[#2f5d3a] text-white"
+                          : "bg-white/90 text-[#2f5d3a] hover:bg-white"
+                      }`}
+                      aria-label={saved ? "Remove from wishlist" : "Save to wishlist"}
                     >
-                      <ShoppingCart className="h-4 w-4" />
+                      <Heart className={`h-4 w-4 ${saved ? "fill-current" : ""}`} />
                     </button>
                   </div>
-                </div>
-              </article>
-            ))}
+
+                  <div className="space-y-2 px-4 py-3 text-[#143519]">
+                    <h3 className="text-base font-semibold">{combo.name}</h3>
+                    <p className="text-xs text-[#35543c]">{combo.description}</p>
+                    <p className="text-[10px] text-[#56735d]">{combo.details}</p>
+
+                    <div className="flex items-center gap-1 text-xs text-[#244a2d]">
+                      <Star className="h-3.5 w-3.5 fill-[#1f6a2f] text-[#1f6a2f]" />
+                      <span>{combo.rating}</span>
+                      <span className="text-[#45634b]">({combo.reviews} Reviews)</span>
+                    </div>
+
+                    <div className="mt-3 flex items-end justify-between border-t border-[#c6d1bf] pt-2">
+                      <div>
+                        <p className="text-xs text-[#56735d]">Started at</p>
+                        <div className="flex items-end gap-2">
+                          <p className="text-lg font-bold text-[#1d4e2a]">
+                            NPR {combo.price}
+                          </p>
+                          <p className="pb-0.5 text-xs text-[#6f7e72] line-through">
+                            NPR {combo.oldPrice}
+                          </p>
+                        </div>
+                      </div>
+
+                      <button
+                        onClick={() => {
+                          addItem({
+                            id: `combo-${combo.name}`,
+                            name: combo.name,
+                            price: combo.price,
+                            image: combo.image,
+                          });
+                          setCartOpen(true);
+                        }}
+                        className="rounded-full bg-[#8fc48f] p-2 text-[#1d4e2a] transition hover:bg-[#7fb77f]"
+                      >
+                        <ShoppingCart className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
           </div>
         </div>
       </main>
