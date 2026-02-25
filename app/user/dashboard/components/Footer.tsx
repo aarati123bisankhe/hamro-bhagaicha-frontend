@@ -1,6 +1,13 @@
-import { Instagram } from "lucide-react";
+import Link from "next/link";
 
 export default function Footer() {
+  const quickLinks = [
+    { label: "About Us", href: "/user/dashboard/about-us" },
+    { label: "Plant Care Guide", href: "/user/dashboard/plant-care-guide" },
+    { label: "Delivery Info", href: "/user/dashboard/delivery-info" },
+    { label: "Contact Us", href: "/user/dashboard/contact-us" },
+  ];
+
   return (
 <footer className="bg-[#7fb195] px-10 py-14 mt-10 text-white">
       <div className="grid md:grid-cols-3 gap-10">
@@ -20,17 +27,23 @@ export default function Footer() {
 
           <p className="text-sm opacity-90 max-w-sm">
             Bringing nature closer to you with a curated collection of plants,
-            pots, and gardening essentials. Let's grow together!
+            pots, and gardening essentials. Let&apos;s grow together!
           </p>
         </div>
 
         <div>
           <h4 className="font-bold mb-4">Quick Links</h4>
           <ul className="text-sm space-y-3 opacity-90">
-            <li>› About Us</li>
-            <li>› Plant Care Guide</li>
-            <li>› Delivery Info</li>
-            <li>› Contact</li>
+            {quickLinks.map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  className="transition hover:text-[#e9f8e4] hover:underline"
+                >
+                  › {link.label}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
 
