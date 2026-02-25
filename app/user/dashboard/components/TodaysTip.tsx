@@ -56,12 +56,6 @@ export default function TodaysTip() {
             Today&apos;s Plant Tip
           </h4>
         </div>
-
-        <div className="inline-flex items-center gap-2 rounded-full bg-white/70 px-3 py-1 text-xs font-semibold text-[#35543c]">
-          <span>{currentTip + 1}</span>
-          <span>/</span>
-          <span>{tips.length}</span>
-        </div>
       </div>
 
       <div
@@ -88,7 +82,7 @@ export default function TodaysTip() {
         </div>
       </div>
 
-      <div className="relative mt-5 flex items-center justify-between gap-4">
+      <div className="relative mt-5 flex items-center">
         <div className="flex gap-2">
           {tips.map((_, index) => (
             <button
@@ -100,23 +94,6 @@ export default function TodaysTip() {
               }`}
             />
           ))}
-        </div>
-
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() =>
-              setCurrentTip((prev) => (prev - 1 + tips.length) % tips.length)
-            }
-            className="rounded-full border border-[#c7d8c0] bg-white/90 px-3 py-1 text-xs font-semibold text-[#2f5d3a] transition hover:bg-white"
-          >
-            Prev
-          </button>
-          <button
-            onClick={() => setCurrentTip((prev) => (prev + 1) % tips.length)}
-            className="rounded-full bg-[#2f5d3a] px-3 py-1 text-xs font-semibold text-white transition hover:bg-[#244a2e]"
-          >
-            Next
-          </button>
         </div>
       </div>
     </section>
