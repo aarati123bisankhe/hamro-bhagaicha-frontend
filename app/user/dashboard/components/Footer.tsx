@@ -1,12 +1,9 @@
 import Link from "next/link";
+import { useSiteContent } from "./contentStore";
 
 export default function Footer() {
-  const quickLinks = [
-    { label: "About Us", href: "/user/dashboard/about-us" },
-    { label: "Plant Care Guide", href: "/user/dashboard/plant-care-guide" },
-    { label: "Delivery Info", href: "/user/dashboard/delivery-info" },
-    { label: "Contact Us", href: "/user/dashboard/contact-us" },
-  ];
+  const { content } = useSiteContent();
+  const quickLinks = content.footer.quickLinks;
 
   return (
 <footer className="bg-[#7fb195] px-10 py-14 mt-10 text-white">
@@ -20,14 +17,13 @@ export default function Footer() {
               className="w-10 h-10 rounded-full bg-white p-1"
             />
             <div>
-              <h4 className="font-bold text-lg">Hamro Bhagaicha</h4>
-              <p className="text-sm opacity-90">Your Green Paradise</p>
+              <h4 className="font-bold text-lg">{content.footer.brandName}</h4>
+              <p className="text-sm opacity-90">{content.footer.tagline}</p>
             </div>
           </div>
 
           <p className="text-sm opacity-90 max-w-sm">
-            Bringing nature closer to you with a curated collection of plants,
-            pots, and gardening essentials. Let&apos;s grow together!
+            {content.footer.aboutText}
           </p>
         </div>
 
@@ -51,16 +47,16 @@ export default function Footer() {
           <h4 className="font-bold mb-4">Connect With Us</h4>
 
           <p className="text-sm opacity-90 flex items-center gap-2">
-            📧 info@hamrobhagaicha.com
+            📧 {content.footer.email}
           </p>
           <p className="text-sm opacity-90 flex items-center gap-2 mt-2">
-            📞 +977 981-2345678
+            📞 {content.footer.phone}
           </p>
         </div>
       </div>
 
       <div className="border-t border-white/30 mt-10 pt-6 flex justify-between text-sm opacity-90">
-        <p>© 2025 Hamro Bhagaicha. All rights reserved.</p>
+        <p>{content.footer.copyright}</p>
         
       </div>
     </footer>

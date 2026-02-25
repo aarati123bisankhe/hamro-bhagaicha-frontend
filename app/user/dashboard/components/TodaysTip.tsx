@@ -1,46 +1,26 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
-const tips = [
-  {
-    emoji: "💧",
-    title: "Watering Wisdom",
-    description:
-      "Check the top inch of soil before watering. Most indoor plants prefer a light dry-out between waterings.",
-    frequency: "Every 2-5 days",
-    level: "Beginner",
-  },
-  {
-    emoji: "🌤️",
-    title: "Light Balance",
-    description:
-      "Rotate pots every week so each side receives equal light and the plant grows evenly.",
-    frequency: "Weekly",
-    level: "Easy",
-  },
-  {
-    emoji: "🌱",
-    title: "Feeding Time",
-    description:
-      "During active growth, use balanced liquid fertilizer in low dose every 2-4 weeks.",
-    frequency: "Every 2-4 weeks",
-    level: "Intermediate",
-  },
-];
+import { useSiteContent } from "./contentStore";
 
 export default function TodaysTip() {
+  const { content } = useSiteContent();
+  const tips = content.tips.items;
   const [currentTip, setCurrentTip] = useState(0);
 
   useEffect(() => {
+    if (tips.length === 0) return () => {};
     const interval = setInterval(() => {
       setCurrentTip((prev) => (prev + 1) % tips.length);
     }, 5500);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [tips.length]);
 
-  const activeTip = tips[currentTip];
+  if (tips.length === 0) return null;
+
+  const safeCurrentTip = currentTip % tips.length;
+  const activeTip = tips[safeCurrentTip];
 
   return (
     <section className="relative overflow-hidden rounded-3xl border border-[#cfddc8] bg-gradient-to-br from-[#f3f9ee] via-[#e8f3df] to-[#dce9d1] p-6 shadow-md transition hover:shadow-lg">
@@ -50,10 +30,10 @@ export default function TodaysTip() {
       <div className="relative flex flex-wrap items-start justify-between gap-4">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#5f7d65]">
-            Daily Green Boost
+            {content.tips.sectionLabel}
           </p>
           <h4 className="mt-1 text-xl font-bold text-[#21452c]">
-            Today&apos;s Plant Tip
+            {content.tips.heading}
           </h4>
         </div>
       </div>
@@ -90,7 +70,7 @@ export default function TodaysTip() {
               onClick={() => setCurrentTip(index)}
               aria-label={`Show tip ${index + 1}`}
               className={`h-2.5 rounded-full transition-all duration-300 ${
-                currentTip === index ? "w-8 bg-[#2f5d3a]" : "w-2.5 bg-[#9db8a1]"
+                safeCurrentTip === index ? "w-8 bg-[#2f5d3a]" : "w-2.5 bg-[#9db8a1]"
               }`}
             />
           ))}
