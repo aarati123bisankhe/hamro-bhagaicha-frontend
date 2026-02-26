@@ -21,6 +21,26 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
+    return NextResponse.json(
+      { success: false, message: "Request body must be an object" },
+      { status: 400 }
+    );
+  }
+
+  const body = payload as Record<string, unknown>;
+  const normalizedTo =
+    (typeof body.to === "string" && body.to.trim()) ||
+    (typeof body.phone === "string" && body.phone.trim()) ||
+    (typeof body.phoneNumber === "string" && body.phoneNumber.trim());
+
+  if (!normalizedTo) {
+    return NextResponse.json(
+      { success: false, message: "Missing SMS recipient (to/phone/phoneNumber)" },
+      { status: 400 }
+    );
+  }
+
   const authToken = request.cookies.get("auth_token")?.value;
 
   const response = await fetch(`${backendBaseUrl}/api/sms/send-order-confirmation`, {
@@ -29,7 +49,10 @@ export async function POST(request: NextRequest) {
       "Content-Type": "application/json",
       ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
     },
-    body: JSON.stringify(payload),
+    body: JSON.stringify({
+      ...body,
+      to: normalizedTo,
+    }),
     cache: "no-store",
   });
 

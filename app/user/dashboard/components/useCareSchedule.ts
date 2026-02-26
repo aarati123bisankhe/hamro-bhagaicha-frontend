@@ -21,7 +21,7 @@ let cachedRawCare = "";
 let cachedCareItems: CareScheduleItem[] = EMPTY_CARE_ITEMS;
 
 function readCareItems(): CareScheduleItem[] {
-  if (typeof window === "undefined") return [];
+  if (typeof window === "undefined") return EMPTY_CARE_ITEMS;
 
   try {
     const raw = localStorage.getItem(CARE_STORAGE_KEY) ?? "";
@@ -77,7 +77,7 @@ export function useCareSchedule() {
       };
     },
     readCareItems,
-    () => []
+    () => EMPTY_CARE_ITEMS
   );
 
   const addTask = (task: Omit<CareScheduleItem, "id">) => {

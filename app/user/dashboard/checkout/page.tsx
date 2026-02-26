@@ -114,6 +114,7 @@ export default function CheckoutPage() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          to: values.phone,
           phone: values.phone,
           phoneNumber: values.phone,
           customerName: values.name,
