@@ -28,15 +28,14 @@ function readUserDataFromCookie(): CurrentUser | null {
 }
 
 export function useCurrentUser() {
-  const [user, setUser] = useState<CurrentUser | null>(() =>
-    readUserDataFromCookie()
-  );
+  const [user, setUser] = useState<CurrentUser | null>(null);
 
   useEffect(() => {
     const refreshUser = () => {
       setUser(readUserDataFromCookie());
     };
 
+    refreshUser();
     window.addEventListener("focus", refreshUser);
     window.addEventListener("user-data-updated", refreshUser);
     return () => {

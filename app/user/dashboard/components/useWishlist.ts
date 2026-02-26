@@ -21,7 +21,7 @@ let cachedRawWishlist = "";
 let cachedWishlistItems: WishlistItem[] = EMPTY_WISHLIST;
 
 function readWishlistItems(): WishlistItem[] {
-  if (typeof window === "undefined") return [];
+  if (typeof window === "undefined") return EMPTY_WISHLIST;
 
   try {
     const raw = localStorage.getItem(WISHLIST_STORAGE_KEY) ?? "";
@@ -71,7 +71,7 @@ export function useWishlist() {
       };
     },
     readWishlistItems,
-    () => []
+    () => EMPTY_WISHLIST
   );
 
   const isWishlisted = (id: string) => {
