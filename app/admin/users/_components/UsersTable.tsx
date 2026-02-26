@@ -30,11 +30,9 @@ export default function UsersTable({
           </tr>
         </thead>
 
-        {/* ================= BODY ================= */}
         <tbody>
           {users.map((u) => (
             <tr key={u._id} className="border-t hover:bg-gray-50">
-              {/* -------- USER INFO -------- */}
               <td className="p-3 flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden relative flex items-center justify-center">
                   {u.profileUrl ? (
@@ -56,13 +54,10 @@ export default function UsersTable({
                 </div>
               </td>
 
-              {/* -------- EMAIL -------- */}
               <td className="p-3">{u.email}</td>
 
-              {/* -------- PHONE -------- */}
               <td className="p-3">{u.phoneNumber}</td>
 
-              {/* -------- ROLE BADGE -------- */}
               <td className="p-3 capitalize">
                 <span
                   className={`px-2 py-1 rounded text-xs font-medium ${
@@ -75,7 +70,6 @@ export default function UsersTable({
                 </span>
               </td>
 
-              {/* -------- ACTIONS -------- */}
               <td className="p-3 text-right">
                 <div className="flex justify-end gap-2">
                   <button
