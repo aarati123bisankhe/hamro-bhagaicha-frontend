@@ -12,22 +12,17 @@ export default function ViewUserModal({
 }) {
   return (
     <>
-      {/* Backdrop */}
       <div
         onClick={onClose}
         className="fixed inset-0 bg-black/40 z-40"
       />
 
-      {/* Modal */}
       <div className="fixed inset-0 z-50 flex items-center justify-center">
         <div className="bg-white w-full max-w-md rounded-md shadow p-6 space-y-5">
           
-          {/* Title */}
           <h2 className="text-xl font-semibold">User Profile</h2>
 
-          {/* Profile Section */}
           <div className="flex items-center gap-4">
-            {/* Avatar */}
             <div className="w-16 h-16 rounded-full bg-gray-200 overflow-hidden relative flex items-center justify-center">
               {user.profileUrl ? (
                 <Image
@@ -43,7 +38,6 @@ export default function ViewUserModal({
               )}
             </div>
 
-            {/* Basic Info */}
             <div>
               <p className="font-semibold text-lg">
                 {user.fullName}
@@ -54,7 +48,6 @@ export default function ViewUserModal({
             </div>
           </div>
 
-          {/* Details */}
           <div className="space-y-2 text-sm">
             <p>
               <span className="font-medium">Phone:</span>{" "}
@@ -68,7 +61,6 @@ export default function ViewUserModal({
 
           </div>
 
-          {/* Footer */}
           <div className="flex justify-end pt-4">
             <button
               onClick={onClose}

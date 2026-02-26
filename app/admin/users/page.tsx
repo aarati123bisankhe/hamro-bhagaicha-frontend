@@ -1,58 +1,3 @@
-// "use client";
-
-// import { Key, useEffect, useState } from "react";
-// import UsersTable from "./_components/UsersTable";
-// import CreateUserModal from "./_components/CreateUserModel";
-// import { getUsers } from "@/lib/actions/admin/user_action";
-
-// export type AdminUser = {
-//     profileUrl: any;
-//     _id: Key | null | undefined;
-//     fullName: string;
-//     lastName: string;
-//     email: string;
-//     phoneNumber: string;
-//     role: "user" | "admin";
-// };
-
-// export default function UsersPage() {
-//   const [users, setUsers] = useState<AdminUser[]>([]);
-//   const [open, setOpen] = useState(false);
-
-//   const loadUsers = async () => {
-//     const res = await getUsers();
-//     setUsers(res);
-//   };
-
-//   useEffect(() => {
-//     loadUsers();
-//   }, []);
-
-//   return (
-//     <div className="space-y-6 p-6 text-black">
-//       <div className="flex justify-between items-center">
-//         <h1 className="text-2xl font-bold text-gray-800">Users</h1>
-//         <button
-//           onClick={() => setOpen(true)}
-//           className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
-//         >
-//           + Create User
-//         </button>
-//       </div>
-
-//       <UsersTable users={users} />
-
-//       {open && (
-//         <CreateUserModal
-//           onClose={() => setOpen(false)}
-//           onSuccess={loadUsers}
-//         />
-//       )}
-//     </div>
-//   );
-// }
-
-
 "use client";
 
 import { Key, useEffect, useMemo, useState } from "react";
@@ -117,13 +62,11 @@ export default function UsersPage() {
     };
   }, []);
 
-  // Trash icon click → open delete modal
   const handleDeleteClick = (user: AdminUser) => {
     setDeleteUser(user);
     setIsDeleteModalOpen(true);
   };
 
-  // Delete confirmed
   const handleDeleteConfirm = async () => {
     if (!deleteUser?._id) return;
 
@@ -141,7 +84,6 @@ export default function UsersPage() {
 
   return (
     <div className="space-y-6 p-6 text-black">
-      {/* Header */}
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-gray-800">Users</h1>
         <button
@@ -152,7 +94,6 @@ export default function UsersPage() {
         </button>
       </div>
 
-      {/* Users Table */}
       <UsersTable
         users={paginatedUsers}
         onView={(u) => setViewUser(u)}
@@ -193,7 +134,6 @@ export default function UsersPage() {
         </div>
       )}
 
-      {/* Create User Modal */}
       {openCreate && (
         <CreateUserModal
           onClose={() => setOpenCreate(false)}
@@ -201,7 +141,6 @@ export default function UsersPage() {
         />
       )}
 
-      {/* View User Modal */}
       {viewUser && (
         <ViewUserModal user={viewUser} onClose={() => setViewUser(null)} />
       )}
@@ -215,7 +154,6 @@ export default function UsersPage() {
         />
       )}
 
-      {/* Delete Confirmation Modal */}
       <DeleteModal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
