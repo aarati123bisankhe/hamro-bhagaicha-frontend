@@ -34,12 +34,6 @@ export default function Page() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 max-w-sm mx-auto mt-5">
       <div className="relative mb-5">
-        {/* <span
-          className="absolute left-0 cursor-pointer text-xl font-medium text-black"
-          onClick={() => router.back()}
-        >
-          &lt;
-        </span> */}
 
         <h2 className="text-2xl mb-20 font-semibold text-[#063c19ff] text-center">
           Forgot Password
