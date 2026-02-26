@@ -18,7 +18,7 @@ let cachedRawCart = "";
 let cachedCartItems: CartItem[] = EMPTY_CART;
 
 function readCartItems(): CartItem[] {
-  if (typeof window === "undefined") return [];
+  if (typeof window === "undefined") return EMPTY_CART;
 
   try {
     const raw = localStorage.getItem(CART_STORAGE_KEY) ?? "";
@@ -68,7 +68,7 @@ export function useCart() {
       };
     },
     readCartItems,
-    () => []
+    () => EMPTY_CART
   );
 
   const addItem = (item: Omit<CartItem, "quantity">) => {
