@@ -76,13 +76,11 @@ export default function CreateUserForm({
     }
   };
 
-  /* ---------------- UI ---------------- */
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
       className="space-y-4 text-black"
     >
-      {/* Full Name */}
       <div>
         <input
           {...register("fullName")}
@@ -94,7 +92,6 @@ export default function CreateUserForm({
         )}
       </div>
 
-      {/* Email */}
       <div>
         <input
           {...register("email")}
@@ -106,7 +103,6 @@ export default function CreateUserForm({
         )}
       </div>
 
-      {/* Password */}
       <div>
         <input
           type="password"
@@ -119,7 +115,6 @@ export default function CreateUserForm({
         )}
       </div>
 
-      {/* Phone */}
       <div>
         <input
           {...register("phoneNumber")}
@@ -133,7 +128,6 @@ export default function CreateUserForm({
         )}
       </div>
 
-      {/* Address */}
       <div>
         <input
           {...register("address")}
@@ -145,7 +139,6 @@ export default function CreateUserForm({
         )}
       </div>
 
-      {/* Profile Image */}
       <div>
         <label className="font-medium">Profile Picture</label>
         <input
@@ -163,7 +156,6 @@ export default function CreateUserForm({
         )}
       </div>
 
-      {/* Role */}
       <div>
         <select
           {...register("role")}
@@ -174,7 +166,6 @@ export default function CreateUserForm({
         </select>
       </div>
 
-      {/* Buttons */}
       <div className="flex justify-end gap-3 pt-4">
         <button
           type="button"
